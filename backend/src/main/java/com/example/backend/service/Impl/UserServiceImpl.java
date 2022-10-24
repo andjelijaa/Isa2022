@@ -5,6 +5,8 @@ import com.example.backend.service.UserService;
 import com.example.backend.models.User;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -17,13 +19,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User checkActivationCode(String code) {
+    public User getActivatedUserFromPrincipal(Principal principal){
+        if(principal == null){
+            return null;
+        }
+        User u = userRepository.findByEmail(principal.getName());
+        if(u != null && u.getActivation() == null){
+            return u;
+        }
         return null;
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public User checkActivationCode(String code) {
+        User user = userRepository.findByActivation(code);
+        if(user == null){
+            return null;
+        }
+        return user;
+    }
+
+    @Override
+    public User findByEmail(String username) {
+        return userRepository.findByEmail(username);
     }
 
     @Override
