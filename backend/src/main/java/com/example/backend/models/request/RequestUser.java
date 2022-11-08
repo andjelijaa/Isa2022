@@ -2,7 +2,7 @@ package com.example.backend.models.request;
 
 
 import com.example.backend.models.Genter;
-import com.example.backend.models.Role;
+import com.example.backend.models.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

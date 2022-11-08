@@ -1,9 +1,10 @@
 package com.example.backend.models;
 
+import com.example.backend.models.enums.Role;
 import lombok.Data;
 
 import javax.persistence.*;
-
+import java.util.List;
 
 @Entity
 @Data
@@ -26,5 +27,13 @@ public class User {
     private Genter genter;
     private Role role;
     private String activation;
+    private String ustanova;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JoinColumn(name = "centar_id", nullable = true)
+    private Centar centar;
+
+    @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "davalac")
+    private List<IstorijaPoseta> posete;
 
 }
