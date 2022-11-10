@@ -1,5 +1,6 @@
 package com.example.backend.service.Impl;
 
+import com.example.backend.exceptions.UnauthorizedException;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import com.example.backend.models.User;
@@ -19,15 +20,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getActivatedUserFromPrincipal(Principal principal){
+    public User getActivatedUserFromPrincipal(Principal principal)throws Exception{
         if(principal == null){
             return null;
         }
         User u = userRepository.findByEmail(principal.getName());
         if(u != null && u.getActivation() == null){
             return u;
-        }
-        return null;
+
+    }else {
+        throw new UnauthorizedException();   }
     }
 
     @Override

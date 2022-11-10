@@ -8,5 +8,5 @@ public interface UserService{
     User checkActivationCode(String code);
     User findByEmail(String Email);
     void save(User user);
-    User getActivatedUserFromPrincipal(Principal principal);
+    User getActivatedUserFromPrincipal(Principal principal)throws Exception;
 }
