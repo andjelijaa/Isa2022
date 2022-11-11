@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.models.IstorijaPoseta;
 import com.example.backend.models.User;
+import com.example.backend.models.ZakazanePosete;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.service.Impl.CentarServiceImpl;
 import com.example.backend.service.UserService;
@@ -36,11 +37,18 @@ public class CentarController {
         return centarServiceImpl.getCentarById(centarId);
     }
 
-    @GetMapping("{centarId}/get-all-za-korisnika")
-    public IstorijaPoseta getSveZaKorisnika(Principal principal,
+    @GetMapping("{centarId}/get-all-za-korisnika/{korisnikId}")
+    public List<IstorijaPoseta> getSveZaKorisnika(Principal principal,
                                             @RequestParam(name = "centarId") Long centarId) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
 
-        return null;
+
+        return centarServiceImpl.getIstorijuPosetaZaKorisnikaUCentru(user, centarId);
     }
+
+    @GetMapping("{centarId}/get-zakazane-posete")
+    public List<ZakazanePosete> getZakazanePosete(Principal principal,
+                                                  @RequestParam(name = "centarId") Long centarId) throws Exception {
+        userService.getActivatedUserFromPrincipal(principal);
+        return centarServiceImpl.getZakazanePosete(centarId);    }
 }
