@@ -22,7 +22,8 @@ public class Centar {
     @OneToMany(mappedBy = "centar")
     private List<User> zaposleni;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "iPosete_id", nullable = true)
-    private IstorijaPoseta istorijaPoseta;
+    private List<IstorijaPoseta> istorijaPoseta;
+
 }
