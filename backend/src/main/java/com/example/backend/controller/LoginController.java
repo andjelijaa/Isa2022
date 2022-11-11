@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.models.Role;
+import com.example.backend.models.enums.Role;
 import com.example.backend.models.User;
 import com.example.backend.models.request.RequestUser;
 import com.example.backend.repository.UserRepository;
