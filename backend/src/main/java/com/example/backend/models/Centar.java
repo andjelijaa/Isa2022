@@ -22,8 +22,10 @@ public class Centar {
     @OneToMany(mappedBy = "centar")
     private List<User> zaposleni;
 
-    @ManyToOne()
-    @JoinColumn(name = "iPosete_id", nullable = true)
+    @OneToMany(mappedBy = "centar")
     private List<IstorijaPoseta> istorijaPoseta;
+
+    @OneToMany(mappedBy = "centar")
+    private List<ZakazanePosete> zakazanePosetes;
 
 }

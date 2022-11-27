@@ -36,4 +36,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "davalac")
     private List<IstorijaPoseta> posete;
 
+    @OneToOne(mappedBy = "davaoc")
+    private ZakazanePosete zakazanaPoseta;
+
 }
