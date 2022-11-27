@@ -15,8 +15,9 @@ public class IstorijaPoseta {
     private Long id;
     private Timestamp datumPosete;
 
-   // @OneToMany(mappedBy = "istorijaPoseta")
-    //  private Centar centar;
+    @ManyToOne
+    @JoinColumn(name = "centar_id", nullable = true)
+    private Centar centar;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinColumn(name = "davalac_id", nullable = true)
