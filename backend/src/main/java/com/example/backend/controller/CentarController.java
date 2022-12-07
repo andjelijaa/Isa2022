@@ -3,13 +3,11 @@ package com.example.backend.controller;
 import com.example.backend.models.IstorijaPoseta;
 import com.example.backend.models.User;
 import com.example.backend.models.ZakazanePosete;
+import com.example.backend.models.request.SortCentarDto;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.service.Impl.CentarServiceImpl;
 import com.example.backend.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -26,8 +24,8 @@ public class CentarController {
     }
 
     @GetMapping("/get-all")
-    public List<CentarDto> getCentri(Principal principal) {
-        return centarServiceImpl.getAllCentri();
+    public List<CentarDto> getCentri(Principal principal, @RequestBody SortCentarDto sortCentarDto) {
+        return centarServiceImpl.getAllCentri(sortCentarDto);
     }
 
     @GetMapping("/{centarId}")

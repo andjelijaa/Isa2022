@@ -2,12 +2,14 @@ package com.example.backend.service.Impl;
 
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.*;
+import com.example.backend.models.request.SortCentarDto;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;
 import com.example.backend.repository.TerminRepository;
 import com.example.backend.repository.ZakazanePoseteRepository;
 import com.example.backend.service.CentarService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -31,12 +33,20 @@ public class CentarServiceImpl implements CentarService {
         this.centarRepository = centarRepository;
         this.istorijaPosetaRepository = istorijaPosetaRepository;
         this.zakazanePoseteRepository = zakazanePoseteRepository;
-        this.terminRepository= terminrepository;
+        this.terminRepository = terminrepository;
     }
 
-    public List<CentarDto> getAllCentri() {
+    public List<CentarDto> getAllCentri(SortCentarDto sortCentarDto) {
 
-        List<Centar> centri = centarRepository.findAll();
+        List<Centar> centri;
+
+        if (sortCentarDto.isGrad()) {
+            centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "grad"));
+        } else if (sortCentarDto.isNaziv()) {
+            centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "naziv"));
+        } else {
+            centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
+        }
 
         List<CentarDto> centriDto = centri
                 .stream()
