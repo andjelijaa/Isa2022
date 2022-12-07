@@ -7,6 +7,7 @@ import com.example.backend.models.response.CentarDto;
 import com.example.backend.service.Impl.CentarServiceImpl;
 import com.example.backend.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +40,7 @@ public class CentarController {
 
     @GetMapping("{centarId}/get-all-za-korisnika/{korisnikId}")
     public List<IstorijaPoseta> getSveZaKorisnika(Principal principal,
-                                            @RequestParam(name = "centarId") Long centarId) throws Exception {
+                                                  @RequestParam(name = "centarId") Long centarId) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
 
 
@@ -50,5 +51,19 @@ public class CentarController {
     public List<ZakazanePosete> getZakazanePosete(Principal principal,
                                                   @RequestParam(name = "centarId") Long centarId) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
-        return centarServiceImpl.getZakazanePosete(centarId);    }
+        return centarServiceImpl.getZakazanePosete(centarId);
+    }
+
+    @PostMapping("{centarId}/kreiraj-termin")
+    public void kreirajTermin(Principal principal,
+                              @RequestParam(name = "centarId") Long centarId,
+                              @RequestParam(name = "datum") String datum,
+                              @RequestParam(name = "vreme") String vreme) throws Exception {
+        User user = userService.getActivatedUserFromPrincipal(principal);
+        if (user.getRole().equals("ADMIN")) {
+            centarServiceImpl.kreirajTermin(centarId, datum, vreme);
+        } else {
+            throw new Exception("Nemate prava da kreirate termin");
+        }
+    }
 }
