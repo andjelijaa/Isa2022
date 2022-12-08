@@ -2,7 +2,10 @@ package com.example.backend.service.Impl;
 
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.models.*;
+import com.example.backend.models.enums.StatusTermina;
 import com.example.backend.models.request.SortCentarDto;
+import com.example.backend.models.request.SortTerminDto;
+import com.example.backend.models.request.SortZakazanePoseteDto;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;
@@ -88,11 +91,17 @@ public class CentarServiceImpl implements CentarService {
         return ip;
     }
 
-    public List<ZakazanePosete> getZakazanePosete(Long centarId) {
+    public List<ZakazanePosete> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
 
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        List<ZakazanePosete> zPosete = zakazanePoseteRepository.findAllByCentarId(centarId);
-
+        List<ZakazanePosete> zPosete;
+        if (sortZakazanePoseteDto.isDatum()) {
+            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
+        } else if (sortZakazanePoseteDto.isOcena()) {
+            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
+        } else {
+            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "trajanje"));
+        }
         return zPosete
                 .stream()
                 .filter(poseta -> poseta.getTermin().after(now))
@@ -108,10 +117,40 @@ public class CentarServiceImpl implements CentarService {
         Termin termin1 = new Termin();
         termin1.setCentarId(centar.getId());
         termin1.setDatum(termin);
-        termin1.setZauzet(false);
+        termin1.setStatus(StatusTermina.NOV);
 
         terminRepository.save(termin1);
     }
 
 
+    public List<Termin> getKreiraniTermini(Long centarId, SortTerminDto sortTerminDto) {
+
+        List<Termin> termini;
+        if (sortTerminDto.isDatum()) {
+            termini = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
+        } else {
+            termini = terminRepository.findAll();
+        }
+
+        switch (sortTerminDto.getStatus()){
+            case NOV:
+                return termini
+                        .stream()
+                        .filter(termin -> termin.getStatus().equals(StatusTermina.NOV))
+                        .collect(Collectors.toList());
+            case OBRAĐEN:
+                return termini
+                        .stream()
+                        .filter(termin -> termin.getStatus().equals(StatusTermina.OBRAĐEN))
+                        .collect(Collectors.toList());
+            case ODBIJEN:
+                return termini
+                        .stream()
+                        .filter(termin -> termin.getStatus().equals(StatusTermina.ODBIJEN))
+                        .collect(Collectors.toList());
+            default:
+                return termini;
+
+        }
+    }
 }
