@@ -1,9 +1,12 @@
 package com.example.backend.controller;
 
 import com.example.backend.models.IstorijaPoseta;
+import com.example.backend.models.Termin;
 import com.example.backend.models.User;
 import com.example.backend.models.ZakazanePosete;
 import com.example.backend.models.request.SortCentarDto;
+import com.example.backend.models.request.SortTerminDto;
+import com.example.backend.models.request.SortZakazanePoseteDto;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.service.Impl.CentarServiceImpl;
 import com.example.backend.service.UserService;
@@ -47,9 +50,9 @@ public class CentarController {
 
     @GetMapping("{centarId}/get-zakazane-posete")
     public List<ZakazanePosete> getZakazanePosete(Principal principal,
-                                                  @RequestParam(name = "centarId") Long centarId) throws Exception {
+                                                  @RequestParam(name = "centarId") Long centarId, @RequestBody SortZakazanePoseteDto sortZakazanePoseteDto) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
-        return centarServiceImpl.getZakazanePosete(centarId);
+        return centarServiceImpl.getZakazanePosete(centarId, sortZakazanePoseteDto);
     }
 
     @PostMapping("{centarId}/kreiraj-termin")
@@ -63,5 +66,13 @@ public class CentarController {
         } else {
             throw new Exception("Nemate prava da kreirate termin");
         }
+    }
+
+    @GetMapping("{centarId}/get-kreirani-termini")
+    public List<Termin> getKreiraniTermini(Principal principal,
+                                           @RequestParam(name = "centarId") Long centarId,
+                                           @RequestBody SortTerminDto sortTerminDto) throws Exception {
+        userService.getActivatedUserFromPrincipal(principal);
+        return centarServiceImpl.getKreiraniTermini(centarId, sortTerminDto);
     }
 }
