@@ -28,6 +28,7 @@ public class User {
     private Role role;
     private String activation;
     private String ustanova;
+    private int penali;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinColumn(name = "centar_id", nullable = true)
