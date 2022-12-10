@@ -4,6 +4,7 @@ import com.example.backend.models.IstorijaPoseta;
 import com.example.backend.models.Termin;
 import com.example.backend.models.User;
 import com.example.backend.models.ZakazanePosete;
+import com.example.backend.models.request.CreateTerminDto;
 import com.example.backend.models.request.SortCentarDto;
 import com.example.backend.models.request.SortTerminDto;
 import com.example.backend.models.request.SortZakazanePoseteDto;
@@ -74,5 +75,13 @@ public class CentarController {
                                            @RequestBody SortTerminDto sortTerminDto) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
         return centarServiceImpl.getKreiraniTermini(centarId, sortTerminDto);
+    }
+
+    @PostMapping("{centarId}/zakazi-termin")
+    public void zakaziTermin(Principal principal,
+                             @RequestParam(name = "centarId") Long centarId,
+                             @RequestBody CreateTerminDto createTerminDto) throws Exception {
+        User user = userService.getActivatedUserFromPrincipal(principal);
+        centarServiceImpl.zakaziTermin(user, centarId, createTerminDto);
     }
 }

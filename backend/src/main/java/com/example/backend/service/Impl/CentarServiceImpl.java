@@ -1,11 +1,11 @@
 package com.example.backend.service.Impl;
 
 import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.exceptions.UnauthorizedException;
 import com.example.backend.models.*;
+import com.example.backend.models.enums.Role;
 import com.example.backend.models.enums.StatusTermina;
-import com.example.backend.models.request.SortCentarDto;
-import com.example.backend.models.request.SortTerminDto;
-import com.example.backend.models.request.SortZakazanePoseteDto;
+import com.example.backend.models.request.*;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;
@@ -152,5 +152,33 @@ public class CentarServiceImpl implements CentarService {
                 return termini;
 
         }
+    }
+
+    public void zakaziTermin(User user, Long centarId, CreateTerminDto createTerminDto) {
+//        if admin
+        if (user.getRole().equals(Role.ROLE_ADMINISTRATOR)) {
+            Termin termin = new Termin();
+            termin.setCentarId(centarId);
+            termin.setDatum(createTerminDto.getDatum());
+            termin.setStatus(StatusTermina.NOV);
+            terminRepository.save(termin);
+        }else {
+            throw new UnauthorizedException();
+        }
+    }
+
+    public List<QRCode> getLstQrCodesWithSortByDatumIzdavanjaAndStatus(User user, Long centarId, SortQrCodeDto sortQrCodeDto) {
+        List<QRCode> qrCodes;
+//        if (sortQrCodeDto.isDatum()) {
+//            qrCodes = qrCodeRepository.findAll(Sort.by(Sort.Direction.ASC, "datumIzdavanja"));
+//        } else {
+//            qrCodes = qrCodeRepository.findAll();
+//        }
+        return null;
+
+    }
+
+    public int getPenali(User user, Long centarId) {
+        return user.getPenali();
     }
 }
