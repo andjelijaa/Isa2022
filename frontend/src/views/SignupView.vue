@@ -69,3 +69,20 @@
         <!-- </div> -->
     </div>
 </template>
+
+
+<script>
+    export default {
+        name: 'SignupView',
+        data() {
+            return {
+                login: false
+            }
+        },
+        mounted() {
+            if (localStorage.getItem('token')) {
+                this.login = true
+            }
+        }
+    }
+</script>
