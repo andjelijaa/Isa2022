@@ -30,27 +30,27 @@
                     <label class="form-label" for="registerName">Name</label>
                 </div>
 
-                <!-- Username input -->
+                <!-- Lastname input -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="registerUsername" class="form-control" />
-                    <label class="form-label" for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" v-model="lastname" class="form-control" />
+                    <label class="form-label" for="registerUsername">Last name</label>
                 </div>
 
                 <!-- Email input -->
                 <div class="form-outline mb-4">
-                    <input type="email" id="registerEmail" class="form-control" />
+                    <input type="email" id="registerEmail" v-model="email" class="form-control" />
                     <label class="form-label" for="registerEmail">Email</label>
                 </div>
 
                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                    <input type="password" id="registerPassword" class="form-control" />
+                    <input type="password" id="registerPassword" v-model="password" class="form-control" />
                     <label class="form-label" for="registerPassword">Password</label>
                 </div>
 
                 <!-- Repeat Password input -->
                 <div class="form-outline mb-4">
-                    <input type="password" id="registerRepeatPassword" class="form-control" />
+                    <input type="password" id="registerRepeatPassword" v-model="repassword" class="form-control" />
                     <label class="form-label" for="registerRepeatPassword">Repeat password</label>
                 </div>
 
@@ -72,16 +72,38 @@
 
 
 <script>
+import axios from 'axios'
     export default {
         name: 'SignupView',
         data() {
             return {
-                login: false
-            }
+                email: '',
+                password: '',
+                repassword: '',
+                name: '',
+                lastname: ''
+                        }
         },
         mounted() {
             if (localStorage.getItem('token')) {
                 this.login = true
+            }
+        },
+        methods: {
+            signup() {
+                axios.post('http://localhost:8001/api/register', {
+                    email: this.email,
+                    password: this.password,
+                    repassword: this.repassword,
+                    name: this.name,
+                    lastname:~ this.lastname
+                })
+                    .then(response => {
+                        console.log(response)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
             }
         }
     }
