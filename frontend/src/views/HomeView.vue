@@ -1,17 +1,17 @@
 <template>
   <div>
     <h1>HOME</h1>
-    <LoginView />
+    <Centri />
   </div>
 </template>
 
 
 
 <script>
-  import LoginView from '@/views/LoginView.vue';
+  import Centri from '@/components/Centri.vue';
   export default {
     components: {
-      LoginView
+      Centri
     }
   }
   </script>

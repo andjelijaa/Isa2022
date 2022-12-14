@@ -26,6 +26,6 @@ public class Centar {
     private List<IstorijaPoseta> istorijaPoseta;
 
     @OneToMany(mappedBy = "centar")
-    private List<ZakazanePosete> zakazanePosetes;
+    private List<ZakazanePosete> zakazanePosete;
 
 }
