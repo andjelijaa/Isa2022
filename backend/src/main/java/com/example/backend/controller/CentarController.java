@@ -40,7 +40,7 @@ public class CentarController {
         return centarServiceImpl.getCentarById(centarId);
     }
 
-    @GetMapping("{centarId}/get-all-za-korisnika/{korisnikId}")
+    @GetMapping("{centarId}/get-all-za-korisnika")
     public List<IstorijaPoseta> getSveZaKorisnika(Principal principal,
                                                   @RequestParam(name = "centarId") Long centarId) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
