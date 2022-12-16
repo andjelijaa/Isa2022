@@ -43,7 +43,7 @@
 <script>
 import axios from 'axios'
 export default {
-    name: 'Centri',
+    name: 'CentriView',
     data() {
         return {
             centri: [],

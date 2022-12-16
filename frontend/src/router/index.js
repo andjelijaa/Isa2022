@@ -28,12 +28,12 @@ const routes = [
   {
     path: '/istorija',
     name: 'istorija',
-    component: () => import('../views/Istorija.vue')
+    component: () => import('../views/IstorijaTermina.vue')
   },
   {
     path: '/zakazani',
     name: 'zakazani',
-    component: () => import('../views/Zakazani.vue')
+    component: () => import('../views/ZakazaniTermini.vue')
   }
 ]
 

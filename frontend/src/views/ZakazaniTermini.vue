@@ -1,18 +1,18 @@
 <template>
     <div class="container">
-        <h1>Istorija</h1>
+        <h1>Zakazani</h1>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th scope="col">Datum</th>
+                            <th scope="col">Termin</th>
                             <th scope="col">Davalac</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="termin in istorija" :key="termin.id">
-                            <td>{{ termin.datum }}</td>
+                        <tr v-for="termin in zakazani" :key="termin.id">
+                            <td>{{ termin.termin }}</td>
                             <td>{{ termin.davalac.ime }}</td>
                         </tr>
                     </tbody>
@@ -22,22 +22,23 @@
     </div>
 </template>
 
+
 <script>
 import axios from 'axios';
 
 export default {
-    name: 'Istorija',
+    name: 'ZakazaniTermini',
     props: ['centarId'],
     data() {
         return {
-            istorija: [],
+            zakazani: [],
         };
     },
     methods: {
-        getIstorija() {
-            axios.get(`http://localhost:8081/centar/${this.centarId}/get-all-za-korisnika`)
+        getZakazani() {
+            axios.get(`http://localhost:8081/centar/${this.centarId}/get-zakazane-posete`)
                 .then((response) => {
-                    this.istorija = response.data;
+                    this.zakazani = response.data;
                 })
                 .catch((error) => {
                     console.log(error);
@@ -45,7 +46,7 @@ export default {
         },
     },
     mounted() {
-        this.getIstorija();
+        this.getZakazani();
     },
 };
 </script>
