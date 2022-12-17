@@ -1,10 +1,14 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Centri</router-link> |
     <router-link to="/about">About</router-link> |
+    <router-link to="/profilKorisnika" v-if="login === true">Profil Korisnika</router-link> |
+    <router-link to="/istorija" v-if="login === true">Istorija Poseta</router-link> |
+    <router-link to="/zakazane" v-if="login === true">Zakazane Posete</router-link> |
     <router-link to="/login">Login</router-link> |
-    <router-link to="/signup">SignUp</router-link>  </nav>
-  <router-view/>
+    <router-link to="/signup">SignUp</router-link>
+  </nav>
+  <router-view />
 </template>
 
 <style>
@@ -29,3 +33,22 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      login: false,
+    };
+  },
+  mounted() {
+    console.log('App mounted');
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.login = true;
+    }
+
+  },
+};
+</script>
