@@ -15,6 +15,8 @@ public class UserDto {
   private String phone;
   private String JMBG;
   private Genter genter;
+  private String role;
+
   public UserDto(User user) {
     this.email = user.getEmail();
     this.ime = user.getIme();
@@ -25,5 +27,6 @@ public class UserDto {
     this.phone = user.getPhone();
     this.JMBG = user.getJMBG();
     this.genter = user.getGenter();
+    this.role = user.getRole().name();
   }
 }
