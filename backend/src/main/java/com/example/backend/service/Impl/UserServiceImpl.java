@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
         user.setGrad(userDto.getGrad());
         user.setDrzava(userDto.getDrzava());
         user.setPhone(userDto.getPhone());
-        user.setJMBG(userDto.getJMBG());
-        user.setGenter(userDto.getGenter());
+        user.setJmbg(userDto.getJMBG());
+        user.setPol(userDto.getGenter());
         userRepository.save(user);
         return new UserDto(user);
     }

@@ -25,8 +25,8 @@ public class UserDto {
     this.adresa = user.getAdresa();
     this.drzava = user.getDrzava();
     this.phone = user.getPhone();
-    this.JMBG = user.getJMBG();
-    this.genter = user.getGenter();
+    this.JMBG = user.getJmbg();
+    this.genter = user.getPol();
     this.role = user.getRole().name();
   }
 }

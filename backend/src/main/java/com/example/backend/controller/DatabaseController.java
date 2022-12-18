@@ -47,9 +47,9 @@ public class DatabaseController {
         user.setPhone("1234567890");
         user.setGrad("grad");
         user.setDrzava("drzava");
-        user.setGenter(Genter.MALE);
+        user.setPol(Genter.MALE);
         user.setPrezime("prezime");
-        user.setJMBG("1223443321345");
+        user.setJmbg("1223443321345");
 
         Centar centar = new Centar();
         centar.setAdresa("adresa testa 2");

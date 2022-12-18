@@ -23,10 +23,11 @@ public class User {
     private String adresa;
     private String drzava;
     private String phone;
-    private String JMBG;
-    private Genter genter;
+    private String jmbg;
+    private Genter pol;
     private Role role;
     private String activation;
+    private String zanimanje;
     private String ustanova;
     private int penali;
 
