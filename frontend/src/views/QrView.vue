@@ -14,7 +14,7 @@ export default {
     }
   },
   created() {
-    axios.get('/qr-codes')
+    axios.get('http://localhost:8081/termin/qr-codes')
       .then(response => {
         this.qrCodes = response.data;
       })

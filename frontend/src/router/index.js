@@ -41,7 +41,7 @@ const routes = [
     component: () => import('../views/ProfilKorisnikaView.vue')
   },
   {
-    path: '/qr',
+    path: '/qr/:id',
     name: 'qr',
     component: () => import('../views/QrView.vue')
   }
