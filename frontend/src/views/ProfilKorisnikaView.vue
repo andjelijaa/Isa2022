@@ -50,7 +50,11 @@ export default {
     },
     methods: {
         getKorisnik() {
-            axios.get('http://localhost:8081/api/user/get-user')
+            axios.get('http://localhost:8081/api/user/get-user', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
                 .then((response) => {
                     this.korisnik = response.data;
                 })
@@ -59,7 +63,11 @@ export default {
                 });
         },
         update() {
-            axios.put('http://localhost:8081/api/user/update-user', this.user)
+            axios.put('http://localhost:8081/api/user/update-user', this.user, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
                 .then((response) => {
                     console.log(response);
                 })

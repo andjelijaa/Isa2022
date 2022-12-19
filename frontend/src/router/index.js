@@ -41,9 +41,19 @@ const routes = [
     component: () => import('../views/ProfilKorisnikaView.vue')
   },
   {
+    path: '/upitnik',
+    name: 'upitnik',
+    component: () => import('../views/UpitnikView.vue')
+  },
+  {
     path: '/qr/:id',
     name: 'qr',
     component: () => import('../views/QrView.vue')
+  },
+  {
+    path: '/centar/:id',
+    name: 'centar',
+    component: () => import('../views/CentarView.vue')
   }
 ]
 

@@ -103,7 +103,8 @@ export default {
             phone: '',
             pol: '',
             zanimanje: '',
-            ustanova: ''
+            ustanova: '',
+            polSend: 0,
         }
     },
     mounted() {
@@ -116,6 +117,11 @@ export default {
             if (this.password !== this.repassword) {
                 alert('Lose ste uneli password')
             } else {
+                if (this.pol == 'M') {
+                    this.polSend = 1
+                }else{
+                    this.polSend = 0
+                }
                 axios.post('http://localhost:8081/api/register', {
                     email: this.email,
                     password: this.password,
@@ -125,7 +131,8 @@ export default {
                     grad: this.grad,
                     drzava: this.drzava,
                     zanimanje: this.zanimanje,
-                    ustanova: this.ustanova
+                    ustanova: this.ustanova,
+                    pol: this.polSend,
                 })
                     .then(response => {
                         console.log(response)

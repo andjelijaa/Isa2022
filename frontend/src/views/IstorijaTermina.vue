@@ -35,7 +35,11 @@ export default {
     },
     methods: {
         getIstorija() {
-            axios.get(`http://localhost:8081/centar/${this.centarId}/get-all-za-korisnika`)
+            axios.get(`http://localhost:8081/centar/${this.centarId}/get-all-za-korisnika`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
                 .then((response) => {
                     this.istorija = response.data;
                 })

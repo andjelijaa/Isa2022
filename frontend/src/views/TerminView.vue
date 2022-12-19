@@ -18,7 +18,11 @@ export default {
     }
   },
   created() {
-    axios.get(`http://localhost:8081/termin/${this.id}`)
+    axios.get(`http://localhost:8081/termin/${this.id}`,{
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
       .then(response => {
         this.termini = response.data;
       })

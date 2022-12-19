@@ -22,9 +22,9 @@ public interface CentarService {
 
     void createTermin(User user, Long centarId, CreateTerminDto createTerminDto);
 
-    List<QRCode> getLstQrCodesWithSortByDatumIzdavanjaAndStatus(User user, Long centarId, SortQrCodeDto sortQrCodeDto);
-
     int getPenali(User user, Long centarId);
+
+    List<Termin> getSlobodniTermini(Long centarId);
 
 
 }

@@ -1,30 +1,35 @@
 <template>
-    <div>
-        <img v-for="qrCode in qrCodes" :src="qrCode" alt="QR code" :key="qrCode.id">
-    </div>
+    <div></div>
 </template>
 
 <script>
 import axios from 'axios';
 
 export default {
+    props: {
+        id: {
+            type: String,
+            required: true
+        }
+    },
     data() {
         return {
-            qrCodes: []
+            termini: []
         }
     },
     created() {
-        axios.get('http://localhost:8081/termin/qr-codes', {
+        axios.get(`http://localhost:8081/centar/${this.id}/get-slobodni-termini`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
             }
         })
             .then(response => {
-                this.qrCodes = response.data;
+                this.termini = response.data;
             })
             .catch(error => {
                 console.log(error);
             });
     }
 }
+
 </script>

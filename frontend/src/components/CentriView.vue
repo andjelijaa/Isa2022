@@ -51,7 +51,11 @@ export default {
         }
     },
     mounted() {
-        axios.get('http://localhost:8081/centar/get-all')
+        axios.get('http://localhost:8081/centar/get-all', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+        })
             .then(response => {
                 this.centri = response.data
             })

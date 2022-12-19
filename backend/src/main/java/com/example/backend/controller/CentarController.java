@@ -76,6 +76,13 @@ public class CentarController {
         return centarServiceImpl.getKreiraniTermini(centarId, sortTerminDto);
     }
 
+    @GetMapping("{centarId}/get-slobodni-termini")
+    public List<Termin> getSlobodniTermini(Principal principal,
+                                           @RequestParam(name = "centarId") Long centarId) throws Exception {
+        userService.getActivatedUserFromPrincipal(principal);
+        return centarServiceImpl.getSlobodniTermini(centarId);
+    }
+
     @PostMapping("{centarId}/zakazi-termin")
     public void zakaziTermin(Principal principal,
                              @RequestParam(name = "centarId") Long centarId,

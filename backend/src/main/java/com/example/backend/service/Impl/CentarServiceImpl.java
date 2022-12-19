@@ -47,7 +47,7 @@ public class CentarServiceImpl implements CentarService {
             centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
         }
 
-        List<CentarDto> centriDto = centri
+        return centri
                 .stream()
                 .map(centar -> new CentarDto(
                         centar.getId(),
@@ -59,8 +59,6 @@ public class CentarServiceImpl implements CentarService {
                         centar.getZaposleni()
                 ))
                 .collect(Collectors.toList());
-
-        return centriDto;
     }
 
     public CentarDto getCentarById(Long centarId) throws Exception {
@@ -82,9 +80,7 @@ public class CentarServiceImpl implements CentarService {
 
     public List<IstorijaPoseta> getIstorijuPosetaZaKorisnikaUCentru(User user, Long centarId) {
 
-        List<IstorijaPoseta> ip = istorijaPosetaRepository.findAllByDavalacIdAndCentarId(user.getId(), centarId);
-
-        return ip;
+        return istorijaPosetaRepository.findAllByDavalacIdAndCentarId(user.getId(), centarId);
     }
 
     public List<Termin> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
@@ -167,18 +163,18 @@ public class CentarServiceImpl implements CentarService {
         }
     }
 
-    public List<QRCode> getLstQrCodesWithSortByDatumIzdavanjaAndStatus(User user, Long centarId, SortQrCodeDto sortQrCodeDto) {
-        List<QRCode> qrCodes;
-//        if (sortQrCodeDto.isDatum()) {
-//            qrCodes = qrCodeRepository.findAll(Sort.by(Sort.Direction.ASC, "datumIzdavanja"));
-//        } else {
-//            qrCodes = qrCodeRepository.findAll();
-//        }
-        return null;
-
-    }
-
     public int getPenali(User user, Long centarId) {
         return user.getPenali();
+    }
+
+    public List<Termin> getSlobodniTermini(Long centarId) {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        List<Termin> termini = terminRepository.findAll();
+        return termini
+                .stream()
+                .filter(termin -> termin.getDatum().after(now))
+                .filter(termin -> termin.getStatus().equals(StatusTermina.NOV))
+                .filter(termin -> termin.isZakazan() == false)
+                .collect(Collectors.toList());
     }
 }
