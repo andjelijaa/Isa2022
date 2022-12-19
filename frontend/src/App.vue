@@ -5,6 +5,7 @@
     <router-link to="/profilKorisnika" v-if="login === true">Profil Korisnika</router-link> |
     <router-link to="/istorija" v-if="login === true">Istorija Poseta</router-link> |
     <router-link to="/zakazane" v-if="login === true">Zakazane Posete</router-link> |
+    <router-link to="/qr" v-if="login === false">QR</router-link> |
     <router-link to="/login">Login</router-link> |
     <router-link to="/signup">SignUp</router-link>
   </nav>

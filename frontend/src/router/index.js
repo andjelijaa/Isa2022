@@ -39,6 +39,11 @@ const routes = [
     path: '/profilKorisnika',
     name: 'profilKorisnika',
     component: () => import('../views/ProfilKorisnikaView.vue')
+  },
+  {
+    path: '/qr',
+    name: 'qr',
+    component: () => import('../views/QrView.vue')
   }
 ]
 
