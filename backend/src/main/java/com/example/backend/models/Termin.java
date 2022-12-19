@@ -15,7 +15,17 @@ public class Termin {
     private Long id;
     private Timestamp datum;
     private StatusTermina status;
-    private long pacijentId;
-    private long doktorId;
-    private long centarId;
+    private boolean zakazan;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JoinColumn(name = "pacijent_id", nullable = true)
+    private User pacijent;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JoinColumn(name = "doktor_id", nullable = true)
+    private User doktor;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JoinColumn(name = "centar_id", nullable = true)
+    private Centar centar;
 }

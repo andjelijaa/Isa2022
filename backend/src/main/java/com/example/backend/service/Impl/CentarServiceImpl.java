@@ -10,7 +10,6 @@ import com.example.backend.models.response.CentarDto;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;
 import com.example.backend.repository.TerminRepository;
-import com.example.backend.repository.ZakazanePoseteRepository;
 import com.example.backend.service.CentarService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,16 +25,13 @@ public class CentarServiceImpl implements CentarService {
 
     private final CentarRepository centarRepository;
     private final IstorijaPosetaRepository istorijaPosetaRepository;
-    private final ZakazanePoseteRepository zakazanePoseteRepository;
     private final TerminRepository terminRepository;
 
     public CentarServiceImpl(CentarRepository centarRepository,
                              IstorijaPosetaRepository istorijaPosetaRepository,
-                             ZakazanePoseteRepository zakazanePoseteRepository,
                              TerminRepository terminrepository) {
         this.centarRepository = centarRepository;
         this.istorijaPosetaRepository = istorijaPosetaRepository;
-        this.zakazanePoseteRepository = zakazanePoseteRepository;
         this.terminRepository = terminrepository;
     }
 
@@ -91,20 +87,21 @@ public class CentarServiceImpl implements CentarService {
         return ip;
     }
 
-    public List<ZakazanePosete> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
+    public List<Termin> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
 
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        List<ZakazanePosete> zPosete;
+        List<Termin> zPosete;
         if (sortZakazanePoseteDto.isDatum()) {
-            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
         } else if (sortZakazanePoseteDto.isOcena()) {
-            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
         } else {
-            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "trajanje"));
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "trajanje"));
         }
         return zPosete
                 .stream()
-                .filter(poseta -> poseta.getTermin().after(now))
+                .filter(termin -> termin.getDatum().after(now))
+                .filter(Termin::isZakazan)
                 .collect(Collectors.toList());
     }
 
@@ -115,7 +112,7 @@ public class CentarServiceImpl implements CentarService {
         Centar centar = centarRepository.findById(centarId)
                 .orElseThrow(() -> new NotFoundException(Centar.class, "id", centarId));
         Termin termin1 = new Termin();
-        termin1.setCentarId(centar.getId());
+        termin1.setCentar(centar);
         termin1.setDatum(termin);
         termin1.setStatus(StatusTermina.NOV);
 
@@ -154,13 +151,16 @@ public class CentarServiceImpl implements CentarService {
         }
     }
 
-    public void zakaziTermin(User user, Long centarId, CreateTerminDto createTerminDto) {
+    public void createTermin(User user, Long centarId, CreateTerminDto createTerminDto) {
 //        if admin
         if (user.getRole().equals(Role.ROLE_ADMINISTRATOR)) {
+            Centar centar = centarRepository.findById(centarId)
+                    .orElseThrow(() -> new NotFoundException(Centar.class, "id", centarId));
             Termin termin = new Termin();
-            termin.setCentarId(centarId);
+            termin.setCentar(centar);
             termin.setDatum(createTerminDto.getDatum());
             termin.setStatus(StatusTermina.NOV);
+            termin.setZakazan(false);
             terminRepository.save(termin);
         }else {
             throw new UnauthorizedException();
