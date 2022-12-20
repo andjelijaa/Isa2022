@@ -47,7 +47,6 @@ public class LoginController {
             System.out.println(link);
             user.setActivation(activationCode);
             emailServiceImpl.sendEmailActivationLinkToUser(user.getEmail(),link);
-            user.setActivation(null);
             userService.save(user);
             return true;
         }
@@ -66,6 +65,17 @@ public class LoginController {
             throw new Exception("invalid username or/and password");
         }
         return jwtUtils.generateToken(requestUser.getPassword());
+    }
+
+    @GetMapping("/potvrdiEmail/{activationCode}")
+    public String potvrdiEmail(@PathVariable String activationCode) {
+        User user = userRepository.findByActivation(activationCode);
+        if (user != null) {
+            user.setActivation(null);
+            userRepository.save(user);
+            return "Uspesno ste aktivirali nalog";
+        }
+        return "Nalog nije aktiviran";
     }
 
 }
