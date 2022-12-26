@@ -41,16 +41,9 @@ export default {
   name: 'App',
   data() {
     return {
-      login: false,
+      login: this.$store.state.globalVariable != null ? true : false,
     };
   },
-  mounted() {
-    console.log('App mounted');
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.login = true;
-    }
-
-  },
+  
 };
 </script>

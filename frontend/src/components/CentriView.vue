@@ -22,6 +22,7 @@
                                 <th scope="col">Drzava</th>
                                 <th scope="col">Telefon</th>
                                 <th scope="col">Ocena</th>
+                                <th scope="col" v-if="login === true"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +32,7 @@
                                 <td>{{ centro.drzava }}</td>
                                 <td>{{ centro.phone }}</td>
                                 <td>{{ centro.ocena }}</td>
+                                <td v-if="login === true"><router-link :to="{ name: 'centar', params: { id: centro.id }}">GO</router-link></td>
                             </tr>
                         </tbody>
                     </table>
@@ -47,16 +49,29 @@ export default {
     data() {
         return {
             centri: [],
-            sort: ''
+            sort: {
+                grad: true,
+                naziv: false,
+                ocena: false
+            },
+            token: '',
+            login: ''
         }
     },
     mounted() {
-        axios.get('http://localhost:8081/centar/get-all', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            }
-        })
+        this.token = this.$store.state.token
+        this.login = this.token !== '' ? true : false
+        const data = {
+            ...this.sort
+        }
+        console.log('data:')
+        console.log(data)
+        console.log('token:')
+        console.log(this.token)
+        axios.get('http://localhost:8081/centar/get-all', {params: data})
             .then(response => {
+                console.log('response:')
+                console.log(response)
                 this.centri = response.data
             })
             .catch(error => {

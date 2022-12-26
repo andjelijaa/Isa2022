@@ -47,7 +47,7 @@ public class CentarServiceImpl implements CentarService {
             centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
         }
 
-        return centri
+        List<CentarDto> dto = centri
                 .stream()
                 .map(centar -> new CentarDto(
                         centar.getId(),
@@ -55,10 +55,10 @@ public class CentarServiceImpl implements CentarService {
                         centar.getAdresa(),
                         centar.getDrzava(),
                         centar.getPhone(),
-                        centar.getOcena(),
-                        centar.getZaposleni()
+                        centar.getOcena()
                 ))
                 .collect(Collectors.toList());
+        return dto;
     }
 
     public CentarDto getCentarById(Long centarId) throws Exception {
@@ -72,8 +72,7 @@ public class CentarServiceImpl implements CentarService {
                 centar.getAdresa(),
                 centar.getDrzava(),
                 centar.getPhone(),
-                centar.getOcena(),
-                centar.getZaposleni()
+                centar.getOcena()
         );
     }
 

@@ -9,7 +9,7 @@
 
             <!-- Name input -->
             <div class="form-outline mb-4">
-                <input type="text" id="registerName" class="form-control" />
+                <input type="text" id="registerName" class="form-control" v-model="name" />
                 <label class="form-label" for="registerName">Name</label>
             </div>
 
@@ -78,7 +78,7 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+            <button type="button" class="btn btn-primary btn-block mb-3" @click="signup">Sign up</button>
         </form>
         <!-- </div> -->
     </div>
@@ -108,9 +108,7 @@ export default {
         }
     },
     mounted() {
-        if (localStorage.getItem('token')) {
-            this.login = true
-        }
+        console.log('Signup mounted.')
     },
     methods: {
         signup() {
@@ -122,7 +120,8 @@ export default {
                 }else{
                     this.polSend = 0
                 }
-                axios.post('http://localhost:8081/api/register', {
+                console.log(this.polSend)
+                const data = {
                     email: this.email,
                     password: this.password,
                     ime: this.name,
@@ -130,10 +129,14 @@ export default {
                     adresa: this.adresa,
                     grad: this.grad,
                     drzava: this.drzava,
+                    jmbg: this.jmbg,
+                    phone: this.phone,
+                    pol: this.polSend,
                     zanimanje: this.zanimanje,
                     ustanova: this.ustanova,
-                    pol: this.polSend,
-                })
+                }
+                console.log(data)
+                axios.post('http://localhost:8081/api/register', data)
                     .then(response => {
                         console.log(response)
                         this.$router.push('/login')

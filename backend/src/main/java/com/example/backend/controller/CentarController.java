@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@RestController("/centar")
+@RestController()
+@RequestMapping("/centar")
 public class CentarController {
     private final UserService userService;
     private final CentarServiceImpl centarServiceImpl;
@@ -27,8 +28,11 @@ public class CentarController {
     }
 
     @GetMapping("/get-all")
-    public List<CentarDto> getCentri(Principal principal, @RequestBody SortCentarDto sortCentarDto) {
-        return centarServiceImpl.getAllCentri(sortCentarDto);
+    public List<CentarDto> getCentri(@RequestParam(name = "grad") boolean grad,
+                                     @RequestParam(name = "ocena") boolean ocena,
+                                     @RequestParam(name = "naziv") boolean naziv) {
+
+        return centarServiceImpl.getAllCentri(new SortCentarDto(grad, ocena, naziv));
     }
 
     @GetMapping("/{centarId}")

@@ -25,6 +25,7 @@ export default {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 }
+                
             })
                 .then(response => {
                     console.log(response);
