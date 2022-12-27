@@ -16,15 +16,15 @@ public interface CentarService {
 
     void kreirajTermin(Long centarId, String datum, String vreme);
 
-    List<ZakazanePosete> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto);
+    List<Termin> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto);
 
     List<Termin> getKreiraniTermini(Long centarId, SortTerminDto sortTerminDto);
 
-    void zakaziTermin(User user, Long centarId, CreateTerminDto createTerminDto);
-
-    List<QRCode> getLstQrCodesWithSortByDatumIzdavanjaAndStatus(User user, Long centarId, SortQrCodeDto sortQrCodeDto);
+    void createTermin(User user, Long centarId, CreateTerminDto createTerminDto);
 
     int getPenali(User user, Long centarId);
+
+    List<Termin> getSlobodniTermini(Long centarId);
 
 
 }

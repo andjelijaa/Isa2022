@@ -23,10 +23,11 @@ public class User {
     private String adresa;
     private String drzava;
     private String phone;
-    private String JMBG;
-    private Genter genter;
+    private String jmbg;
+    private Genter pol;
     private Role role;
     private String activation;
+    private String zanimanje;
     private String ustanova;
     private int penali;
 
@@ -36,8 +37,11 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "davalac")
     private List<IstorijaPoseta> posete;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pacijent")
+    private  List<Termin> zakazaniTerminiPacijent;
 
-    @OneToOne(mappedBy = "davaoc")
-    private ZakazanePosete zakazanaPoseta;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "doktor")
+    private List<Termin> zakazaniTerminiDoktor;
+
 
 }

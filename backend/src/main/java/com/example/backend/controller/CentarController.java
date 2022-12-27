@@ -3,7 +3,6 @@ package com.example.backend.controller;
 import com.example.backend.models.IstorijaPoseta;
 import com.example.backend.models.Termin;
 import com.example.backend.models.User;
-import com.example.backend.models.ZakazanePosete;
 import com.example.backend.models.request.CreateTerminDto;
 import com.example.backend.models.request.SortCentarDto;
 import com.example.backend.models.request.SortTerminDto;
@@ -16,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@RestController("/centar")
+@RestController()
+@RequestMapping("/centar")
 public class CentarController {
     private final UserService userService;
     private final CentarServiceImpl centarServiceImpl;
@@ -28,8 +28,11 @@ public class CentarController {
     }
 
     @GetMapping("/get-all")
-    public List<CentarDto> getCentri(Principal principal, @RequestBody SortCentarDto sortCentarDto) {
-        return centarServiceImpl.getAllCentri(sortCentarDto);
+    public List<CentarDto> getCentri(@RequestParam(name = "grad") boolean grad,
+                                     @RequestParam(name = "ocena") boolean ocena,
+                                     @RequestParam(name = "naziv") boolean naziv) {
+
+        return centarServiceImpl.getAllCentri(new SortCentarDto(grad, ocena, naziv));
     }
 
     @GetMapping("/{centarId}")
@@ -40,7 +43,7 @@ public class CentarController {
         return centarServiceImpl.getCentarById(centarId);
     }
 
-    @GetMapping("{centarId}/get-all-za-korisnika/{korisnikId}")
+    @GetMapping("{centarId}/get-all-za-korisnika")
     public List<IstorijaPoseta> getSveZaKorisnika(Principal principal,
                                                   @RequestParam(name = "centarId") Long centarId) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
@@ -50,7 +53,7 @@ public class CentarController {
     }
 
     @GetMapping("{centarId}/get-zakazane-posete")
-    public List<ZakazanePosete> getZakazanePosete(Principal principal,
+    public List<Termin> getZakazanePosete(Principal principal,
                                                   @RequestParam(name = "centarId") Long centarId, @RequestBody SortZakazanePoseteDto sortZakazanePoseteDto) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
         return centarServiceImpl.getZakazanePosete(centarId, sortZakazanePoseteDto);
@@ -77,11 +80,18 @@ public class CentarController {
         return centarServiceImpl.getKreiraniTermini(centarId, sortTerminDto);
     }
 
+    @GetMapping("{centarId}/get-slobodni-termini")
+    public List<Termin> getSlobodniTermini(Principal principal,
+                                           @RequestParam(name = "centarId") Long centarId) throws Exception {
+        userService.getActivatedUserFromPrincipal(principal);
+        return centarServiceImpl.getSlobodniTermini(centarId);
+    }
+
     @PostMapping("{centarId}/zakazi-termin")
     public void zakaziTermin(Principal principal,
                              @RequestParam(name = "centarId") Long centarId,
                              @RequestBody CreateTerminDto createTerminDto) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
-        centarServiceImpl.zakaziTermin(user, centarId, createTerminDto);
+        centarServiceImpl.createTermin(user, centarId, createTerminDto);
     }
 }

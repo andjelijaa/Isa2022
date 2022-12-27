@@ -6,7 +6,6 @@ import com.example.backend.models.enums.Role;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;
 import com.example.backend.repository.UserRepository;
-import com.example.backend.repository.ZakazanePoseteRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,16 +22,13 @@ public class DatabaseController {
     private final CentarRepository centarRepository;
     private final IstorijaPosetaRepository istorijaPosetaRepository;
     private final UserRepository userRepository;
-    private final ZakazanePoseteRepository zakazanePoseteRepository;
 
     public DatabaseController(CentarRepository centarRepository,
                               IstorijaPosetaRepository istorijaPosetaRepository,
-                              UserRepository userRepository,
-                              ZakazanePoseteRepository zakazanePoseteRepository) {
+                              UserRepository userRepository) {
         this.centarRepository = centarRepository;
         this.istorijaPosetaRepository = istorijaPosetaRepository;
         this.userRepository = userRepository;
-        this.zakazanePoseteRepository = zakazanePoseteRepository;
     }
 
     @GetMapping("/init")
@@ -47,9 +43,9 @@ public class DatabaseController {
         user.setPhone("1234567890");
         user.setGrad("grad");
         user.setDrzava("drzava");
-        user.setGenter(Genter.MALE);
+        user.setPol(Genter.MALE);
         user.setPrezime("prezime");
-        user.setJMBG("1223443321345");
+        user.setJmbg("1223443321345");
 
         Centar centar = new Centar();
         centar.setAdresa("adresa testa 2");
@@ -75,20 +71,6 @@ public class DatabaseController {
         istorijaPosetaRepository.saveAndFlush(istorijaPoseta1);
         istorijaPosetaRepository.saveAndFlush(istorijaPoseta2);
 
-        ZakazanePosete zakazanePosete1 = new ZakazanePosete();
-        ZakazanePosete zakazanePosete2 = new ZakazanePosete();
-
-        zakazanePosete1.setCentar(centar);
-        zakazanePosete1.setDavaoc(user);
-        zakazanePosete1.setTermin(Timestamp.valueOf(LocalDateTime.now().plusDays(5)));
-
-        zakazanePosete2.setCentar(centar);
-        zakazanePosete2.setDavaoc(user);
-        zakazanePosete2.setTermin(Timestamp.valueOf(LocalDateTime.now().plusDays(15).plusHours(2)));
-
-        zakazanePoseteRepository.saveAndFlush(zakazanePosete1);
-        zakazanePoseteRepository.saveAndFlush(zakazanePosete2);
-
         return "Napunjeno";
     }
 
@@ -97,13 +79,11 @@ public class DatabaseController {
         List<Centar> centri = centarRepository.findAll();
         List<User> useri = userRepository.findAll();
         List<IstorijaPoseta> istorijePoseta = istorijaPosetaRepository.findAll();
-        List<ZakazanePosete> zakazanePosete = zakazanePoseteRepository.findAll();
 
         Map<String, Object> map = new HashMap<>();
         map.put("Centri", centri);
         map.put("Useri", useri);
         map.put("IstorijaPoseta", istorijePoseta);
-        map.put("ZakazanePosete", zakazanePosete);
         return map;
     }
 
@@ -112,13 +92,7 @@ public class DatabaseController {
         List<Centar> centri = centarRepository.findAll();
         List<User> useri = userRepository.findAll();
         List<IstorijaPoseta> istorijePoseta = istorijaPosetaRepository.findAll();
-        List<ZakazanePosete> zakazanePosete = zakazanePoseteRepository.findAll();
 
-        zakazanePosete
-                .stream()
-                .forEach(zakazanePosete1 -> {
-                    zakazanePoseteRepository.delete(zakazanePosete1);
-                });
         istorijePoseta
                 .stream()
                 .forEach(istorijaPoseta -> {

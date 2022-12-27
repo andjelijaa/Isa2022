@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST})
 @RestController
 @RequestMapping("/api")
 public class LoginController {
@@ -36,8 +37,9 @@ public class LoginController {
         this.userService = userService;
     }
 
+
     @PostMapping("/register")
-    public boolean register(@RequestBody User user) throws MessagingException {
+    public boolean register(@RequestBody User user) {
         User u = userRepository.findByEmail(user.getEmail());
         if (u == null) {
             user.setRole(Role.ROLE_KORISNIK);
@@ -46,8 +48,7 @@ public class LoginController {
             System.out.println("link");
             System.out.println(link);
             user.setActivation(activationCode);
-            emailServiceImpl.sendEmailActivationLinkToUser(user.getEmail(),link);
-            user.setActivation(null);
+            emailServiceImpl.sendEmail(user.getEmail(), "Aktivacioni link", link);
             userService.save(user);
             return true;
         }
@@ -65,7 +66,19 @@ public class LoginController {
         } catch (Exception ex) {
             throw new Exception("invalid username or/and password");
         }
-        return jwtUtils.generateToken(requestUser.getPassword());
+        String jwt = jwtUtils.generateToken(requestUser.getPassword());
+        return jwt;
+    }
+
+    @GetMapping("/potvrdiEmail/{activationCode}")
+    public String potvrdiEmail(@PathVariable String activationCode) {
+        User user = userRepository.findByActivation(activationCode);
+        if (user != null) {
+            user.setActivation(null);
+            userRepository.save(user);
+            return "Uspesno ste aktivirali nalog";
+        }
+        return "Nalog nije aktiviran";
     }
 
 }

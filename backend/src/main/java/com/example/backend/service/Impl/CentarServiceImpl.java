@@ -10,7 +10,6 @@ import com.example.backend.models.response.CentarDto;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;
 import com.example.backend.repository.TerminRepository;
-import com.example.backend.repository.ZakazanePoseteRepository;
 import com.example.backend.service.CentarService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,16 +25,13 @@ public class CentarServiceImpl implements CentarService {
 
     private final CentarRepository centarRepository;
     private final IstorijaPosetaRepository istorijaPosetaRepository;
-    private final ZakazanePoseteRepository zakazanePoseteRepository;
     private final TerminRepository terminRepository;
 
     public CentarServiceImpl(CentarRepository centarRepository,
                              IstorijaPosetaRepository istorijaPosetaRepository,
-                             ZakazanePoseteRepository zakazanePoseteRepository,
                              TerminRepository terminrepository) {
         this.centarRepository = centarRepository;
         this.istorijaPosetaRepository = istorijaPosetaRepository;
-        this.zakazanePoseteRepository = zakazanePoseteRepository;
         this.terminRepository = terminrepository;
     }
 
@@ -51,7 +47,7 @@ public class CentarServiceImpl implements CentarService {
             centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
         }
 
-        List<CentarDto> centriDto = centri
+        List<CentarDto> dto = centri
                 .stream()
                 .map(centar -> new CentarDto(
                         centar.getId(),
@@ -59,12 +55,10 @@ public class CentarServiceImpl implements CentarService {
                         centar.getAdresa(),
                         centar.getDrzava(),
                         centar.getPhone(),
-                        centar.getOcena(),
-                        centar.getZaposleni()
+                        centar.getOcena()
                 ))
                 .collect(Collectors.toList());
-
-        return centriDto;
+        return dto;
     }
 
     public CentarDto getCentarById(Long centarId) throws Exception {
@@ -78,33 +72,31 @@ public class CentarServiceImpl implements CentarService {
                 centar.getAdresa(),
                 centar.getDrzava(),
                 centar.getPhone(),
-                centar.getOcena(),
-                centar.getZaposleni()
+                centar.getOcena()
         );
     }
 
 
     public List<IstorijaPoseta> getIstorijuPosetaZaKorisnikaUCentru(User user, Long centarId) {
 
-        List<IstorijaPoseta> ip = istorijaPosetaRepository.findAllByDavalacIdAndCentarId(user.getId(), centarId);
-
-        return ip;
+        return istorijaPosetaRepository.findAllByDavalacIdAndCentarId(user.getId(), centarId);
     }
 
-    public List<ZakazanePosete> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
+    public List<Termin> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
 
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        List<ZakazanePosete> zPosete;
+        List<Termin> zPosete;
         if (sortZakazanePoseteDto.isDatum()) {
-            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
         } else if (sortZakazanePoseteDto.isOcena()) {
-            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
         } else {
-            zPosete = zakazanePoseteRepository.findAll(Sort.by(Sort.Direction.ASC, "trajanje"));
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "trajanje"));
         }
         return zPosete
                 .stream()
-                .filter(poseta -> poseta.getTermin().after(now))
+                .filter(termin -> termin.getDatum().after(now))
+                .filter(Termin::isZakazan)
                 .collect(Collectors.toList());
     }
 
@@ -115,7 +107,7 @@ public class CentarServiceImpl implements CentarService {
         Centar centar = centarRepository.findById(centarId)
                 .orElseThrow(() -> new NotFoundException(Centar.class, "id", centarId));
         Termin termin1 = new Termin();
-        termin1.setCentarId(centar.getId());
+        termin1.setCentar(centar);
         termin1.setDatum(termin);
         termin1.setStatus(StatusTermina.NOV);
 
@@ -154,31 +146,34 @@ public class CentarServiceImpl implements CentarService {
         }
     }
 
-    public void zakaziTermin(User user, Long centarId, CreateTerminDto createTerminDto) {
+    public void createTermin(User user, Long centarId, CreateTerminDto createTerminDto) {
 //        if admin
         if (user.getRole().equals(Role.ROLE_ADMINISTRATOR)) {
+            Centar centar = centarRepository.findById(centarId)
+                    .orElseThrow(() -> new NotFoundException(Centar.class, "id", centarId));
             Termin termin = new Termin();
-            termin.setCentarId(centarId);
+            termin.setCentar(centar);
             termin.setDatum(createTerminDto.getDatum());
             termin.setStatus(StatusTermina.NOV);
+            termin.setZakazan(false);
             terminRepository.save(termin);
         }else {
             throw new UnauthorizedException();
         }
     }
 
-    public List<QRCode> getLstQrCodesWithSortByDatumIzdavanjaAndStatus(User user, Long centarId, SortQrCodeDto sortQrCodeDto) {
-        List<QRCode> qrCodes;
-//        if (sortQrCodeDto.isDatum()) {
-//            qrCodes = qrCodeRepository.findAll(Sort.by(Sort.Direction.ASC, "datumIzdavanja"));
-//        } else {
-//            qrCodes = qrCodeRepository.findAll();
-//        }
-        return null;
-
-    }
-
     public int getPenali(User user, Long centarId) {
         return user.getPenali();
+    }
+
+    public List<Termin> getSlobodniTermini(Long centarId) {
+        Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+        List<Termin> termini = terminRepository.findAll();
+        return termini
+                .stream()
+                .filter(termin -> termin.getDatum().after(now))
+                .filter(termin -> termin.getStatus().equals(StatusTermina.NOV))
+                .filter(termin -> termin.isZakazan() == false)
+                .collect(Collectors.toList());
     }
 }

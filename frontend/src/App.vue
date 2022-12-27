@@ -1,10 +1,16 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/login">Login</router-link> |
-    <router-link to="/signup">SignUp</router-link>  </nav>
-  <router-view/>
+    <router-link to="/">Centri |</router-link>
+    <router-link to="/profilKorisnika" v-if="login === true">Profil Korisnika |</router-link>
+    <router-link to="/istorija" v-if="login === true">Istorija Poseta |</router-link>
+    <router-link to="/zakazane" v-if="login === true">Zakazane Posete |</router-link> 
+    <router-link to="/qr" v-if="login === true">QR |</router-link>
+    <router-link to="/upitnik" v-if="login === true">Upitnik |</router-link>
+    <router-link to="/zalbe" v-if="login === true">Zalbe |</router-link>
+    <router-link to="/login" v-if="login === false">Login |</router-link>
+    <router-link to="/signup" v-if="login === false">SignUp</router-link>
+  </nav>
+  <router-view />
 </template>
 
 <style>
@@ -29,3 +35,15 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return {
+      login: this.$store.state.globalVariable != null ? true : false,
+    };
+  },
+  
+};
+</script>

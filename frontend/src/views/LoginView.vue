@@ -5,29 +5,12 @@
                 <form>
                     <div class="text-center mb-3">
                         <p>Sign in with:</p>
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-google"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-
-                        <button type="button" class="btn btn-link btn-floating mx-1">
-                            <i class="fab fa-github"></i>
-                        </button>
                     </div>
-
-                    <p class="text-center">or:</p>
 
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <input type="email" id="loginName" class="form-control" v-model="email"/>
-                        <label class="form-label" for="loginName">Email or username</label>
+                        <label class="form-label" for="loginName">Email</label>
                     </div>
 
                     <!-- Password input -->
@@ -36,29 +19,9 @@
                         <label class="form-label" for="loginPassword">Password</label>
                     </div>
 
-                    <!-- 2 column grid layout -->
-                    <div class="row mb-4">
-                        <div class="col-md-6 d-flex justify-content-center">
-                            <!-- Checkbox -->
-                            <div class="form-check mb-3 mb-md-0">
-                                <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
-                                <label class="form-check-label" for="loginCheck"> Remember me </label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 d-flex justify-content-center">
-                            <!-- Simple link -->
-                            <a href="#!">Forgot password?</a>
-                        </div>
-                    </div>
 
                     <!-- Submit button -->
-                    <button type="submit" class="btn btn-primary btn-block mb-4" @click="login">Sign in</button>
-
-                    <!-- Register buttons -->
-                    <div class="text-center">
-                        <p>Not a member? <a href="#!">Register</a></p>
-                    </div>
+                    <button type="button" class="btn btn-primary btn-block mb-4" @click="login">Sign in</button>
                 </form>
             </div>
 
@@ -90,8 +53,8 @@ export default {
             })
             .then(response => {
                 console.log(response)
-                localStorage.setItem('token', response.data.access_token)
-                this.$router.push({ name: 'Home' })
+                this.$store.dispatch('setToken', response.data)
+                this.$router.push({ name: 'home' })
             })
             .catch(error => {
                 console.log(error)
