@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-
     public final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
@@ -30,7 +29,6 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findByEmail(principal.getName());
         if(u != null && u.getActivation() == null){
             return u;
-
     }else {
         throw new UnauthorizedException();   }
     }
@@ -55,8 +53,6 @@ public class UserServiceImpl implements UserService {
         user.setQuestions(questions);
         userRepository.save(user);
     }
-
-
 
     @Override
     public User checkActivationCode(String code) {
