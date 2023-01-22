@@ -1,6 +1,7 @@
 package com.example.backend.service.Impl;
 
 import com.example.backend.exceptions.UnauthorizedException;
+import com.example.backend.models.request.CreateQuestionDto;
 import com.example.backend.models.response.UserDto;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
@@ -8,10 +9,10 @@ import com.example.backend.models.User;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
 
     public final UserRepository userRepository;
 
@@ -28,7 +29,6 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findByEmail(principal.getName());
         if(u != null && u.getActivation() == null){
             return u;
-
     }else {
         throw new UnauthorizedException();   }
     }
@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService {
         user.setPol(userDto.getGenter());
         userRepository.save(user);
         return new UserDto(user);
+    }
+
+    @Override
+    public void sendQuestions(User user, List<CreateQuestionDto> questions) {
+        user.setQuestions(questions);
+        userRepository.save(user);
     }
 
     @Override

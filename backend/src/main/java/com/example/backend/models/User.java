@@ -1,6 +1,7 @@
 package com.example.backend.models;
 
 import com.example.backend.models.enums.Role;
+import com.example.backend.models.request.CreateQuestionDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -31,12 +32,16 @@ public class User {
     private String ustanova;
     private int penali;
 
+    @Transient
+    private List<CreateQuestionDto> questions;
+
     @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinColumn(name = "centar_id", nullable = true)
     private Centar centar;
 
     @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "davalac")
     private List<IstorijaPoseta> posete;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pacijent")
     private  List<Termin> zakazaniTerminiPacijent;
 
