@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/centar")
 public class CentarController {
     private final UserService userService;
-    private final CentarServiceImpl centarServiceImpl;
+    private final CentarServiceImpl centarServiceImpl; ////////
 
     public CentarController(UserService userService,
                             CentarServiceImpl centarServiceImpl) {

@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 
 import com.example.backend.models.*;
+import com.example.backend.models.enums.Genter;
 import com.example.backend.models.enums.Role;
 import com.example.backend.repository.CentarRepository;
 import com.example.backend.repository.IstorijaPosetaRepository;

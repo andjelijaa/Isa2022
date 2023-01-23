@@ -40,10 +40,10 @@ public class LoginController {
 
     @PostMapping("/register")
     public boolean register(@RequestBody User user) {
-        User u = userRepository.findByEmail(user.getEmail());
+        User u = userService.findByEmail(user.getEmail());  //////
         if (u == null) {
             user.setRole(Role.ROLE_KORISNIK);
-            String activationCode = EmailServiceImpl.generateActivationCode();
+            String activationCode = emailServiceImpl.generateActivationCode();
             String link = "http://localhost:8081/api/potvrdiEmail/" + activationCode;
             System.out.println("link");
             System.out.println(link);
@@ -72,10 +72,10 @@ public class LoginController {
 
     @GetMapping("/potvrdiEmail/{activationCode}")
     public String potvrdiEmail(@PathVariable String activationCode) {
-        User user = userRepository.findByActivation(activationCode);
+        User user = userRepository.findByActivation(activationCode);   ///
         if (user != null) {
             user.setActivation(null);
-            userRepository.save(user);
+            userService.save(user);
             return "Uspesno ste aktivirali nalog";
         }
         return "Nalog nije aktiviran";
