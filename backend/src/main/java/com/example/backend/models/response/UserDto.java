@@ -1,6 +1,6 @@
 package com.example.backend.models.response;
 
-import com.example.backend.models.Genter;
+import com.example.backend.models.enums.Genter;
 import com.example.backend.models.User;
 import lombok.Data;
 

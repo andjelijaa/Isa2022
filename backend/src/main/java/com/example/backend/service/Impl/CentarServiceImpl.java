@@ -35,6 +35,7 @@ public class CentarServiceImpl implements CentarService {
         this.terminRepository = terminrepository;
     }
 
+    @Override
     public List<CentarDto> getAllCentri(SortCentarDto sortCentarDto) {
 
         List<Centar> centri;
@@ -61,6 +62,7 @@ public class CentarServiceImpl implements CentarService {
         return dto;
     }
 
+    @Override
     public CentarDto getCentarById(Long centarId) throws Exception {
 
         Centar centar = centarRepository.findById(centarId)
@@ -76,12 +78,13 @@ public class CentarServiceImpl implements CentarService {
         );
     }
 
-
+    @Override
     public List<IstorijaPoseta> getIstorijuPosetaZaKorisnikaUCentru(User user, Long centarId) {
 
         return istorijaPosetaRepository.findAllByDavalacIdAndCentarId(user.getId(), centarId);
     }
 
+    @Override
     public List<Termin> getZakazanePosete(Long centarId, SortZakazanePoseteDto sortZakazanePoseteDto) {
 
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
@@ -100,6 +103,7 @@ public class CentarServiceImpl implements CentarService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void kreirajTermin(Long centarId, String datum, String vreme) {
 
         Timestamp termin = Timestamp.valueOf(datum + " " + vreme);
@@ -115,6 +119,7 @@ public class CentarServiceImpl implements CentarService {
     }
 
 
+    @Override
     public List<Termin> getKreiraniTermini(Long centarId, SortTerminDto sortTerminDto) {
 
         List<Termin> termini;
@@ -146,6 +151,7 @@ public class CentarServiceImpl implements CentarService {
         }
     }
 
+    @Override
     public void createTermin(User user, Long centarId, CreateTerminDto createTerminDto) {
 //        if admin
         if (user.getRole().equals(Role.ROLE_ADMINISTRATOR)) {
@@ -162,10 +168,12 @@ public class CentarServiceImpl implements CentarService {
         }
     }
 
+    @Override
     public int getPenali(User user, Long centarId) {
         return user.getPenali();
     }
 
+    @Override
     public List<Termin> getSlobodniTermini(Long centarId) {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         List<Termin> termini = terminRepository.findAll();

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Date;
 import java.util.Properties;
@@ -20,6 +21,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Override
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(to);
@@ -28,10 +30,11 @@ public class EmailServiceImpl implements EmailService {
 
         javaMailSender.send(mailMessage);
     }
+
     public static String generateActivationCode(){
         byte[] array = new byte[7]; // length is bounded by 7
         new Random().nextBytes(array);
-        String generatedString = new String(array, Charset.forName("UTF-8"));
+        String generatedString = String.valueOf(Math.random());
         return generatedString;
     }
 
