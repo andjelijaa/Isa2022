@@ -55,6 +55,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByActivation(String code) {
+        return userRepository.findByActivation(code);
+    }
+
+    @Override
     public User checkActivationCode(String code) {
         User user = userRepository.findByActivation(code);
         if(user == null){

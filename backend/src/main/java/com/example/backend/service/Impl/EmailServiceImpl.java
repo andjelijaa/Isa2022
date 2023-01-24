@@ -32,8 +32,6 @@ public class EmailServiceImpl implements EmailService {
     }
 
     public static String generateActivationCode(){
-        byte[] array = new byte[7]; // length is bounded by 7
-        new Random().nextBytes(array);
         String generatedString = String.valueOf(Math.random());
         return generatedString;
     }
