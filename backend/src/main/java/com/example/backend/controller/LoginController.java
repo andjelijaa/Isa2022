@@ -7,7 +7,6 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.service.Impl.EmailServiceImpl;
 import com.example.backend.service.UserService;
 import com.example.backend.utils.JwtUtils;
-import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,9 +24,6 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private  UserService userService;
 
     @Autowired
@@ -40,7 +36,7 @@ public class LoginController {
 
     @PostMapping("/register")
     public boolean register(@RequestBody User user) {
-        User u = userService.findByEmail(user.getEmail());  //////
+        User u = userService.findByEmail(user.getEmail());
         if (u == null) {
             user.setRole(Role.ROLE_KORISNIK);
             String activationCode = emailServiceImpl.generateActivationCode();
@@ -58,7 +54,6 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestBody RequestUser requestUser) throws Exception {
-
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword())
@@ -72,7 +67,7 @@ public class LoginController {
 
     @GetMapping("/potvrdiEmail/{activationCode}")
     public String potvrdiEmail(@PathVariable String activationCode) {
-        User user = userRepository.findByActivation(activationCode);   ///
+        User user = userService.findByActivation(activationCode);
         if (user != null) {
             user.setActivation(null);
             userService.save(user);
