@@ -1,4 +1,5 @@
 <template>
+    <NavbarView/>
     <div>
 
         <!-- <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register"> -->
@@ -63,7 +64,12 @@
             </div>
 
             <div class="form-outline mb-4">
-                <input type="text" id="registerPol" v-model="pol" class="form-control" />
+                <!-- <input type="text" id="registerPol" v-model="pol" class="form-control" /> -->
+                <select class="form-select" v-model="pol">
+            <option selected>Pol</option>
+            <option value="M">Musko</option>
+            <option value="Z">Zensko</option>
+            </select>
                 <label class="form-label" for="registerPol">Pol</label>
             </div>
 
@@ -87,7 +93,9 @@
 
 <script>
 import axios from 'axios'
+import NavbarView from '@/components/NavbarView.vue';
 export default {
+    components: {NavbarView},
     name: 'SignupView',
     data() {
         return {
@@ -114,11 +122,14 @@ export default {
         signup() {
             if (this.password !== this.repassword) {
                 alert('Lose ste uneli password')
+            }
+            else if(this.jmbg.length != 13){
+                alert('Lose ste uneli JMBG')
             } else {
                 if (this.pol == 'M') {
-                    this.polSend = 1
-                }else{
                     this.polSend = 0
+                }else if(this.pol == 'Z'){
+                    this.polSend = 1
                 }
                 console.log(this.polSend)
                 const data = {

@@ -1,4 +1,5 @@
 <template>
+    <NavbarView/>
     <div>
         <div class="tab-content">
             <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
@@ -32,8 +33,10 @@
 <script>
 
 import axios from 'axios' 
+import NavbarView from '@/components/NavbarView.vue';
+
 export default {
-    components:{
+    components:{ NavbarView
     },
     data() {
         return {

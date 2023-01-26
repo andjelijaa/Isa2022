@@ -1,4 +1,5 @@
 <template>
+    <NavbarView/>
     <div class="container">
         <h1>Profil korisnika</h1>
         <div class="row">
@@ -40,8 +41,10 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import NavbarView from '@/components/NavbarView.vue';
 export default {
+    components: {NavbarView},
     name: 'ProfilKorisnikaView',
     data() {
         return {
@@ -52,7 +55,7 @@ export default {
         getKorisnik() {
             axios.get('http://localhost:8081/api/user/get-user', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${this.$store.state.token}`,
             }
         })
                 .then((response) => {
@@ -65,7 +68,7 @@ export default {
         update() {
             axios.put('http://localhost:8081/api/user/update-user', this.user, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${this.$store.state.token}`,
             }
         })
                 .then((response) => {

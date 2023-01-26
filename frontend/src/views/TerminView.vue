@@ -1,11 +1,13 @@
 <template>
-
+<NavbarView/>
 </template>
 
 <script>
 import axios from 'axios';
+import NavbarView from '@/components/NavbarView.vue';
 
 export default {
+  components: {NavbarView},
     props: {
     id: {
       type: String,

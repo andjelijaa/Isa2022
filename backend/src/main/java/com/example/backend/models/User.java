@@ -46,8 +46,8 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pacijent")
     private  List<Termin> zakazaniTerminiPacijent;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "doktor")
-    private List<Termin> zakazaniTerminiDoktor;
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "doktor")
+//    private List<Termin> zakazaniTerminiDoktor;
 
 
 }

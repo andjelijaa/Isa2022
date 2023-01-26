@@ -1,4 +1,5 @@
 <template>
+  <NavbarView/>
     <div>
       <h1>Upitnik</h1>
       <form>
@@ -12,7 +13,10 @@
   </template>
   
   <script>
+    import NavbarView from '@/components/NavbarView.vue';
+
   export default {
+    components:{NavbarView},
     data() {
       return {
         questions: [

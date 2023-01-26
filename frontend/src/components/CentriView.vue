@@ -60,7 +60,7 @@ export default {
     },
     mounted() {
         this.token = this.$store.state.token
-        this.login = this.token !== '' ? true : false
+        this.login = this.token != null ? true : false
         const data = {
             ...this.sort
         }
