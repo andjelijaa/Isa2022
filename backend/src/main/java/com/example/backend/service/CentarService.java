@@ -23,8 +23,10 @@ public interface CentarService {
 
     int getPenali(User user, Long centarId);
 
-    List<Termin> getSlobodniTermini(Long centarId);
+    List<Termin> getSlobodniTermini(Long centarId, boolean datum);
 
 
     List<Centar> getCentriZaZalbe(User user);
+
+    List<User> getZaposleniZaZalbe(User user);
 }

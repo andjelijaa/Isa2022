@@ -6,11 +6,9 @@ import lombok.Data;
 public class SortCentarDto {
     private boolean grad;
     private boolean ocena;
-    private boolean naziv;
 
-    public SortCentarDto(boolean grad, boolean ocena, boolean naziv) {
+    public SortCentarDto(boolean grad, boolean ocena) {
         this.grad = grad;
         this.ocena = ocena;
-        this.naziv = naziv;
     }
 }

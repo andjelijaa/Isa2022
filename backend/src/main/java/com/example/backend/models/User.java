@@ -3,6 +3,7 @@ package com.example.backend.models;
 import com.example.backend.models.enums.Genter;
 import com.example.backend.models.enums.Role;
 import com.example.backend.models.request.CreateQuestionDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,18 +33,18 @@ public class User {
     private String zanimanje;
     private String ustanova;
     private int penali;
+    private boolean questionFlag;
 
     @Transient
     private List<CreateQuestionDto> questions;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JoinColumn(name = "centar_id", nullable = true)
     private Centar centar;
 
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pacijent")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "pacijent")
     private  List<Termin> zakazaniTerminiPacijent;
-
-
 
 }

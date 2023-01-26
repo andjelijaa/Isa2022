@@ -1,6 +1,7 @@
 package com.example.backend.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,12 +20,15 @@ public class Centar {
     private String phone;
     private float ocena;
 
+
+//    @JsonIgnore
     @OneToMany(mappedBy = "centar")
     private List<User> zaposleni;
 
 //    @OneToMany(mappedBy = "centar")
 //    private List<IstorijaPoseta> istorijaPoseta;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "centar")
     private List<Termin> termini;
 

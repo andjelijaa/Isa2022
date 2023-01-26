@@ -28,10 +28,9 @@ public class CentarController {
 
     @GetMapping("/get-all")
     public List<CentarDto> getCentri(@RequestParam(name = "grad") boolean grad,
-                                     @RequestParam(name = "ocena") boolean ocena,
-                                     @RequestParam(name = "naziv") boolean naziv) {
+                                     @RequestParam(name = "ocena") boolean ocena) {
 
-        return centarService.getAllCentri(new SortCentarDto(grad, ocena, naziv));
+        return centarService.getAllCentri(new SortCentarDto(grad, ocena));
     }
 
     @GetMapping("/{centarId}")
@@ -62,21 +61,14 @@ public class CentarController {
         }
     }
 
-//    @GetMapping("{centarId}/get-kreirani-termini")
-//    public List<Termin> getKreiraniTermini(Principal principal,
-//                                           @RequestParam(name = "centarId") Long centarId,
-//                                           @RequestBody SortTerminDto sortTerminDto) throws Exception {
-//        userService.getActivatedUserFromPrincipal(principal);
-//        return centarService.getKreiraniTermini(centarId, sortTerminDto);
-//    }
-
-//    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("{centarId}/get-slobodni-termini")
     public List<Termin> getSlobodniTermini(Principal principal,
-                                           @PathVariable(name = "centarId") Long centarId) throws Exception {
+                                           @PathVariable(name = "centarId") Long centarId,
+                                           @RequestParam(name = "datum") boolean datum
+                                           ) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
         System.out.println(centarId);
-        return centarService.getSlobodniTermini(centarId);
+        return centarService.getSlobodniTermini(centarId, datum);
     }
 
     @GetMapping("/get-centri-za-zalbe")
@@ -85,11 +77,11 @@ public class CentarController {
         return centarService.getCentriZaZalbe(user);
     }
 
-//    @PostMapping("{centarId}/zakazi-termin")
-//    public void zakaziTermin(Principal principal,
-//                             @RequestParam(name = "centarId") Long centarId,
-//                             @RequestBody CreateTerminDto createTerminDto) throws Exception {
-//        User user = userService.getActivatedUserFromPrincipal(principal);
-//        centarService.createTermin(user, centarId, createTerminDto);
-//    }
+    @GetMapping("/get-zaposleni-za-zalbe")
+    public List<User> getZaposleniZaZalbe(Principal principal) throws Exception {
+        User user = userService.getActivatedUserFromPrincipal(principal);
+        return centarService.getZaposleniZaZalbe(user);
+    }
+
+
 }

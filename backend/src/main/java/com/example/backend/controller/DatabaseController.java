@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +92,22 @@ public class DatabaseController {
         user3.setPrezime("Simic");
         user3.setJmbg("2234564321234");
 
+        User user4 = new User();
+        user4.setActivation(null);
+        user4.setEmail("testDoktor1111@test.com");
+        user4.setAdresa("Danice Maksimovic 14");
+        user4.setRole(Role.ROLE_MEDICINSKO_OSOBLJE);
+        user4.setPassword("123");
+        user4.setIme("Marko");
+        user4.setPhone("08899955");
+        user4.setGrad("Beograd");
+        user4.setDrzava("Srbija");
+        user4.setPol(Genter.MALE);
+        user4.setPrezime("Obilic");
+        user4.setJmbg("2234564321234");
+
+
+
         Centar centar = new Centar();
         centar.setAdresa("adresa testa 2");
         centar.setGrad("grad");
@@ -106,7 +123,6 @@ public class DatabaseController {
         centar1.setDrzava("Srbija");
         centar1.setPhone("021555666");
         centar1.setOcena(4);
-//        centar1.setZaposleni(user1);???
         centarRepository.saveAndFlush(centar1);
 
         Centar centar2 = new Centar();
@@ -118,17 +134,19 @@ public class DatabaseController {
         centarRepository.saveAndFlush(centar2);
 
 
-        user.setCentar(centar);///
         userRepository.saveAndFlush(user);
 
         user1.setCentar(centar1);
         userRepository.saveAndFlush(user1);
 
-//        user2.setCentar(centar1);
         userRepository.saveAndFlush(user2);
 
         user3.setCentar(centar2);
         userRepository.saveAndFlush(user3);
+
+
+        user4.setCentar(centar);
+        userRepository.saveAndFlush(user4);
 
         Termin termin= new Termin();
         termin.setZakazan(false);
@@ -145,6 +163,15 @@ public class DatabaseController {
         termin1.setDatum(Timestamp.valueOf("2022-09-27 13:00:00"));
         termin1.setPacijent(user);
         terminRepository.save(termin1);
+
+
+        Termin termin7= new Termin();
+        termin7.setZakazan(true);
+        termin7.setStatus(StatusTermina.OBRAĐEN);
+        termin7.setCentar(centar);
+        termin7.setDatum(Timestamp.valueOf("2021-09-24 07:00:00"));
+        termin7.setPacijent(user);
+        terminRepository.save(termin7);
 
         Termin termin2= new Termin();
         termin2.setZakazan(true);
@@ -185,6 +212,22 @@ public class DatabaseController {
         termin6.setDatum(Timestamp.valueOf("2023-03-18 16:00:00"));
         termin6.setPacijent(user2);
         terminRepository.save(termin6);
+
+
+        Termin termin8= new Termin();
+        termin8.setZakazan(false);
+        termin8.setStatus(StatusTermina.NOV);
+        termin8.setCentar(centar2);
+        termin8.setDatum(Timestamp.valueOf("2023-10-29 13:25:00"));
+        terminRepository.save(termin8);
+
+        Termin termin9= new Termin();
+        termin9.setZakazan(false);
+        termin9.setStatus(StatusTermina.NOV);
+        termin9.setCentar(centar);
+        termin9.setDatum(Timestamp.valueOf("2023-04-29 09:45:00"));
+        terminRepository.save(termin9);
+
 
         Zalba zalba= new Zalba();
         zalba.setUserEmail(user.getEmail());

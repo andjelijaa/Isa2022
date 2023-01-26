@@ -9,6 +9,7 @@
     <router-link to="/zalbe" v-if="login === true">Zalbe |</router-link>
     <router-link to="/login" v-if="login === false">Login |</router-link>
     <router-link to="/signup" v-if="login === false">SignUp</router-link>
+    <router-link to="/" v-if="login === true" @click="logout">Logout</router-link>
   </nav>
 </template>
 <script>
@@ -20,6 +21,11 @@ export default {
     ,
     mounted(){
         this.login= this.$store.state.token!= null ? true : false
+    },
+    methods: {
+        logout(){
+            this.$store.dispatch('setToken', null)
+        }
     }
 }
 </script>

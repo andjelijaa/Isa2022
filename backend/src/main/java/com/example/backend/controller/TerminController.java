@@ -58,10 +58,11 @@ public class TerminController {
 
     @GetMapping("/istorija-termina")
     public List<Termin> getIstorijaZaKorisnika(
-            Principal principal
+            Principal principal,
+            @RequestParam(name = "datum") boolean datum
     ) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
-        return terminService.istorijaPoseta(user);
+        return terminService.istorijaPoseta(user, datum);
     }
 
     @GetMapping("/get-zakazane-posete")

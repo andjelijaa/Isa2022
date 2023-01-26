@@ -16,6 +16,7 @@
                             <th scope="col">Telefon</th>
                             <th scope="col">JMBG</th>
                             <th scope="col">Pol</th>
+                            <th scope="col">Penali</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -30,6 +31,7 @@
                             <td><input type="text" v-model="user.phone" /></td>
                             <td><input type="text" v-model="user.jmbg" /></td>
                             <td><input type="text" v-model="user.genter" /></td>
+                            <td><input type="text" v-model="user.penali" disabled /></td>
                             <td><button class="btn btn-primary" @click="update">Update</button></td>
                         </tr>
                     </tbody>

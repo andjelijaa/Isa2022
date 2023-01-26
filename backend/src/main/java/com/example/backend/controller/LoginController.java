@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.exceptions.UnauthorizedException;
 import com.example.backend.models.enums.Role;
 import com.example.backend.models.User;
 import com.example.backend.models.request.RequestUser;
@@ -44,6 +45,7 @@ public class LoginController {
             System.out.println("link");
             System.out.println(link);
             user.setActivation(activationCode);
+            user.setQuestionFlag(false);
             emailServiceImpl.sendEmail(user.getEmail(), "Aktivacioni link", link);
             userService.save(user);
             return true;
@@ -54,6 +56,10 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login(@RequestBody RequestUser requestUser) throws Exception {
+        User user = userService.findByEmail(requestUser.getEmail());
+        if(user == null || user.getActivation() != null){
+            throw new UnauthorizedException();
+        }
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(requestUser.getEmail(), requestUser.getPassword())

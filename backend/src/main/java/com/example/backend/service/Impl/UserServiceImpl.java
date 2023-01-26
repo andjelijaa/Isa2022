@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean sendQuestions(User user, List<CreateQuestionDto> questions) {
         user.setQuestions(questions);
+        user.setQuestionFlag(true);
         userRepository.save(user);
         return true;
     }
