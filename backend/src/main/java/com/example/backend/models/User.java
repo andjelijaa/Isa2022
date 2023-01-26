@@ -40,14 +40,10 @@ public class User {
     @JoinColumn(name = "centar_id", nullable = true)
     private Centar centar;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "davalac")
-    private List<IstorijaPoseta> posete;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pacijent")
     private  List<Termin> zakazaniTerminiPacijent;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "doktor")
-//    private List<Termin> zakazaniTerminiDoktor;
 
 
 }

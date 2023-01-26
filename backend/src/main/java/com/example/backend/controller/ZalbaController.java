@@ -5,23 +5,22 @@ import com.example.backend.models.User;
 import com.example.backend.models.Zalba;
 import com.example.backend.repository.ZalbaRepository;
 import com.example.backend.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.backend.service.ZalbaService;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
-@RestController("/zalba")
+@RestController
+@RequestMapping("/zalba")
 public class ZalbaController {
     private final UserService userService;
-    private final ZalbaRepository zalbaRepository;
+    private final ZalbaService zalbaService;
 
-    public ZalbaController(UserService userService, ZalbaRepository zalbaRepository) {
+    public ZalbaController(UserService userService, ZalbaService zalbaService) {
         this.userService = userService;
-        this.zalbaRepository = zalbaRepository;
+        this.zalbaService = zalbaService;
     }
 
     @PostMapping("/add")
@@ -31,7 +30,7 @@ public class ZalbaController {
             Zalba zalba = new Zalba();
             zalba.setTekst(params.get("text"));
             zalba.setUserEmail(user.getEmail());
-            zalbaRepository.save(zalba);
+            zalbaService.save(zalba);
             return true;
         }
         return true;
@@ -41,7 +40,7 @@ public class ZalbaController {
     public List<Zalba> getAllZalbe(Principal principal) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
         if(user.getRole().equals("ROLE_ADMIN")){
-            return zalbaRepository.findAll();
+            return zalbaService.findAll();
         }
         throw new ForbiddenException();
     }

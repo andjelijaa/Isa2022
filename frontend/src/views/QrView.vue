@@ -19,10 +19,12 @@ export default {
     created() {
         axios.get('http://localhost:8081/termin/qr-codes', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': `Bearer ${this.$store.state.token}`,
             }
         })
             .then(response => {
+                console.log('QR')
+                console.log('data: ', response.data)
                 this.qrCodes = response.data;
             })
             .catch(error => {

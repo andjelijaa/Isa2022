@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface TerminRepository extends JpaRepository<Termin, Long> {
     List<Termin> findByPacijentId(Long id);
 
-    Optional<Termin> findByPacijentIdByOrderByDatumDesc(Long id);
+    Optional<Termin> findByPacijentIdOrderByDatumDesc(Long id); // todo: probati
+
 }

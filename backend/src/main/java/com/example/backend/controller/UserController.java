@@ -4,13 +4,13 @@ import com.example.backend.models.User;
 import com.example.backend.models.request.CreateQuestionDto;
 import com.example.backend.models.response.UserDto;
 import com.example.backend.service.UserService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 
-@RestController("/api/user")
+@RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -23,7 +23,8 @@ public class UserController {
     public UserDto getUserById(Principal principal) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
 
-        return new UserDto(user);
+        UserDto dto = new UserDto(user);
+        return dto;
     }
 
     @PutMapping("/update-user")
@@ -34,9 +35,9 @@ public class UserController {
     }
 
     @PostMapping("/questions")
-    public void sendQuestions(Principal principal, @RequestBody List<CreateQuestionDto> questions) throws Exception {
+    public boolean sendQuestions(Principal principal, @RequestBody List<CreateQuestionDto> questions) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
-        userService.sendQuestions(user, questions);
+        return userService.sendQuestions(user, questions);
     }
 
 }
