@@ -14,7 +14,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="termin in zakazani" :key="termin.id">
-                            <td>{{ termin.termin }}</td>
+                            <td>{{ termin.datum }}</td>
                             <td>{{ termin.pacijent.ime }}</td>
                             <td><button @click="otkazi(termin.id)">Otkazi</button></td>
                         </tr>
@@ -57,6 +57,8 @@ export default {
                 });
         },
     otkazi(id) {
+        console.log("ZakazaniTermini otkazi")
+        console.log('id: ', id)
       axios
         .delete(`http://localhost:8081/termin/${id}/otkazi`, {
             headers: {
@@ -64,7 +66,8 @@ export default {
             },
         })
         .then((response) => {
-          console.log(response);
+          console.log('response: data', response);
+          this.$router.push('/')
         })
         .catch((error) => {
           console.log(error);

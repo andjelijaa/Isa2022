@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +39,6 @@ public class CentarServiceImpl implements CentarService {
 
         if (sortCentarDto.isGrad()) {
             centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "grad"));
-        } else if (sortCentarDto.isNaziv()) {
-            centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "naziv"));
         } else {
             centri = centarRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
         }
@@ -162,11 +161,17 @@ public class CentarServiceImpl implements CentarService {
     }
 
     @Override
-    public List<Termin> getSlobodniTermini(Long centarId) {
+    public List<Termin> getSlobodniTermini(Long centarId, boolean datum) {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
-        List<Termin> termini = terminRepository.findAll();
+        List<Termin> termini;
+        if(datum){
+            termini = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
+        }else{
+            termini = terminRepository.findAll();
+        }
         List<Termin> rester = termini
                 .stream()
+                .filter(termin -> termin.getCentar().getId().equals(centarId))
                 .filter(termin -> termin.getDatum().after(now))
                 .filter(termin -> termin.getStatus().equals(StatusTermina.NOV))
                 .filter(termin -> termin.isZakazan() == false)
@@ -177,10 +182,30 @@ public class CentarServiceImpl implements CentarService {
     @Override
     public List<Centar> getCentriZaZalbe(User user) {
         List<Termin> termini = terminRepository.findByPacijentId(user.getId());
-        return termini
+        List<Centar> rester = termini
                 .stream()
                 .filter(termin -> termin.getDatum().before(Timestamp.valueOf(LocalDateTime.now())))
                 .map(termin -> termin.getCentar())
+                .distinct()
                 .collect(Collectors.toList());
+        return rester;
+    }
+
+    @Override
+    public List<User> getZaposleniZaZalbe(User user) {
+        List<Termin> termini = terminRepository.findByPacijentId(user.getId());
+        List<Centar> rester = termini
+                .stream()
+                .filter(termin -> termin.getDatum().before(Timestamp.valueOf(LocalDateTime.now())))
+                .map(termin -> termin.getCentar())
+                .distinct()
+                .collect(Collectors.toList());
+        List<User> zaposleni = new ArrayList<>();
+        for(Centar c : rester){
+            for(User u : c.getZaposleni()){
+                zaposleni.add(u);
+            }
+        }
+        return zaposleni;
     }
 }

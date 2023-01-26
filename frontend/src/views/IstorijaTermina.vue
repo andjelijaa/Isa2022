@@ -1,27 +1,22 @@
 <template>
   <div>
     <NavbarView />
+    <button class="btn" @click="sortCentri">Sort po datumu</button>
+
     <div class="container">
       <h1>Istorija</h1>
-      <!-- <div class="row">
-        <label>Datum: </label>
-        <input type="date" v-model="date" />
-        <button @click="sort">Sort</button>
-      </div> -->
       <div class="row">
         <div class="col-md-12">
           <table class="table table-striped">
             <thead>
               <tr>
                 <th scope="col">Datum</th>
-                <th scope="col">Pacijent</th>
                 <th scope="col">Centar</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="termin in istorija" :key="termin.id">
                 <td>{{ termin.datum }}</td>
-                <td>{{ termin.pacijent.ime }}</td>
                 <td>{{ termin.centar.id }}</td>
               </tr>
             </tbody>
@@ -42,19 +37,46 @@ export default {
   data() {
     return {
       istorija: [],
-      date: '',
     };
   },
   methods: {
     getIstorija() {
+        const data = {
+        datum: false,
+      };
       axios
         .get(`http://localhost:8081/termin/istorija-termina`, {
+            params: data,
+            headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        })
+        .then((response) => {
+            console.log('Istorija termina')
+            console.log('data: ', response.data)
+          this.istorija = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    sortCentri() {
+      const data = {
+        datum: true,
+      };
+      console.log("IstorijaView");
+      axios
+        .get(`http://localhost:8081/termin/istorija-termina`, {
+          params: data,
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
         })
         .then((response) => {
+          console.log("IstorijaView");
+          console.log("data: ", response.data);
           this.istorija = response.data;
+          console.log("termini: ", this.termini);
         })
         .catch((error) => {
           console.log(error);

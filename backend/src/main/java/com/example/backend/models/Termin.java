@@ -1,6 +1,7 @@
 package com.example.backend.models;
 
 import com.example.backend.models.enums.StatusTermina;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,11 +18,11 @@ public class Termin {
     private StatusTermina status;
     private boolean zakazan;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JoinColumn(name = "pacijent_id", nullable = true)
     private User pacijent;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JoinColumn(name = "centar_id", nullable = true)
     private Centar centar;
 }

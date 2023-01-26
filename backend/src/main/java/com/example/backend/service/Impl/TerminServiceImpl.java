@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,29 +34,50 @@ public class TerminServiceImpl implements TerminService {
     }
 
     @Override
-    public List<Termin> istorijaPoseta(User user) {
+    public List<Termin> istorijaPoseta(User user, boolean datum) {
 
         List<Termin> termini = terminRepository.findByPacijentId(user.getId());
-        return termini
+        if(datum){
+            return termini
+                    .stream()
+                    .sorted(Comparator.comparing(Termin::getDatum))
+                    .filter(termin -> termin.getStatus().equals(StatusTermina.OBRAĐEN))
+                    .filter(termin -> termin.getDatum().before(Timestamp.valueOf(LocalDateTime.now())))
+                    .collect(Collectors.toList());
+        }
+        List<Termin> rester = termini
                 .stream()
                 .filter(termin -> termin.getStatus().equals(StatusTermina.OBRAĐEN))
                 .filter(termin -> termin.getDatum().before(Timestamp.valueOf(LocalDateTime.now())))
                 .collect(Collectors.toList());
+        return rester;
     }
 
     @Override
     public boolean zakaziTermin(User user, Long terminId) {
         Termin termin = terminRepository.findById(terminId).orElseThrow(() -> new NotFoundException("Termin ne postoji"));
-        Optional<Termin> zadnjiTerminKorisnika = terminRepository.findByPacijentIdOrderByDatumDesc(user.getId());
+        List<Termin> userTermini = terminRepository.findByPacijentId(user.getId());
         boolean flag = false;
-        if(zadnjiTerminKorisnika.isPresent()){
-            if (zadnjiTerminKorisnika.get().getDatum().before(Timestamp.valueOf(LocalDateTime.now().minusMonths(6))) && zadnjiTerminKorisnika.get().getStatus().equals(StatusTermina.OBRAĐEN) && user.getPenali() < 3){
+        if(userTermini.size() == 0){
+            if(user.isQuestionFlag() && user.getPenali() < 3){
+                flag= true;
+            }
+        }else{
+            Termin zadnjiTerminKorisnika = userTermini
+                    .stream()
+                    .sorted((t1, t2) -> t2.getDatum().compareTo(t1.getDatum()))
+                    .collect(Collectors.toList())
+                    .get(0);
+            if (zadnjiTerminKorisnika.getDatum().before(Timestamp.valueOf(LocalDateTime.now().minusMonths(6))) && zadnjiTerminKorisnika.getStatus().equals(StatusTermina.OBRAĐEN) && user.getPenali() < 3 && user.getQuestions() != null){
                 flag = true;
             }
+//        }
+
         }
-        if(!user.getQuestions().isEmpty() && flag) {
+        if(flag) {
             termin.setPacijent(user);
             termin.setZakazan(true);
+            termin.setStatus(StatusTermina.OBRAĐEN);
             terminRepository.save(termin);
             return true;
         }
@@ -65,10 +87,9 @@ public class TerminServiceImpl implements TerminService {
     @Override
     public boolean otkaziTermin(User user, Long terminId) {
         Termin termin = terminRepository.findById(terminId).orElseThrow(() -> new NotFoundException("Termin ne postoji"));
-        if(termin.getDatum().after(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))){
+        if(termin.getDatum().before(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))){
 
-            user.setPenali(user.getPenali() + 1);
-            userRepository.save(user);
+            return false;
         }
         termin.setPacijent(null);
         termin.setZakazan(false);

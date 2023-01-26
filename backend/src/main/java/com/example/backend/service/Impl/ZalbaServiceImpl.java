@@ -1,5 +1,6 @@
 package com.example.backend.service.Impl;
 
+import com.example.backend.models.User;
 import com.example.backend.models.Zalba;
 import com.example.backend.repository.ZalbaRepository;
 import com.example.backend.service.ZalbaService;
@@ -17,8 +18,8 @@ public class ZalbaServiceImpl implements ZalbaService {
     }
 
     @Override
-    public List<Zalba> findAll() {
-        return zalbaRepository.findAll();
+    public List<Zalba> findAll(User user) {
+        return zalbaRepository.findByUserEmail(user.getEmail());
     }
 
     @Override

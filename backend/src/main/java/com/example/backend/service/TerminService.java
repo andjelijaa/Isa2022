@@ -9,7 +9,7 @@ public interface TerminService {
 
     Termin findById(Long id) throws Exception;
 
-    List<Termin> istorijaPoseta(User user);
+    List<Termin> istorijaPoseta(User user, boolean datum);
 
     boolean zakaziTermin(User user, Long terminId);
 

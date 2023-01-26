@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.exceptions.ForbiddenException;
 import com.example.backend.models.User;
 import com.example.backend.models.Zalba;
+import com.example.backend.models.enums.Role;
 import com.example.backend.repository.ZalbaRepository;
 import com.example.backend.service.UserService;
 import com.example.backend.service.ZalbaService;
@@ -26,7 +27,7 @@ public class ZalbaController {
     @PostMapping("/add")
     public boolean addZalba(Principal principal, @RequestBody Map<String, String> params) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
-        if(user.getRole().equals("ROLE_KORISNIK")){
+        if(user.getRole().equals(Role.ROLE_KORISNIK)){
             Zalba zalba = new Zalba();
             zalba.setTekst(params.get("text"));
             zalba.setUserEmail(user.getEmail());
@@ -39,9 +40,6 @@ public class ZalbaController {
     @GetMapping("/get-all")
     public List<Zalba> getAllZalbe(Principal principal) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
-        if(user.getRole().equals("ROLE_ADMIN")){
-            return zalbaService.findAll();
-        }
-        throw new ForbiddenException();
+            return zalbaService.findAll(user);
     }
 }
