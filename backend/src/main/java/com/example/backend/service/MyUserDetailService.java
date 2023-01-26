@@ -21,7 +21,6 @@ public class MyUserDetailService implements UserDetailsService {
     @Autowired
     private MessageSource messages;
 
-
     public MyUserDetailService(UserService userService) {
         this.userService = userService;
     }

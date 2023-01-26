@@ -1,4 +1,5 @@
 <template>
+    <NavbarView/>
     <div>
         <img v-for="qrCode in qrCodes" :src="qrCode" alt="QR code" :key="qrCode.id">
     </div>
@@ -6,8 +7,10 @@
 
 <script>
 import axios from 'axios';
+import NavbarView from '@/components/NavbarView.vue';
 
 export default {
+    components:{NavbarView},
     data() {
         return {
             qrCodes: []

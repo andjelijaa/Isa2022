@@ -61,7 +61,7 @@ public class LoginController {
         } catch (Exception ex) {
             throw new Exception("invalid username or/and password");
         }
-        String jwt = jwtUtils.generateToken(requestUser.getPassword());
+        String jwt = jwtUtils.generateToken(requestUser.getEmail());
         return jwt;
     }
 

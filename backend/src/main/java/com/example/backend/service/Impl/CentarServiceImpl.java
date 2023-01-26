@@ -91,10 +91,8 @@ public class CentarServiceImpl implements CentarService {
         List<Termin> zPosete;
         if (sortZakazanePoseteDto.isDatum()) {
             zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "datum"));
-        } else if (sortZakazanePoseteDto.isOcena()) {
-            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "ocena"));
-        } else {
-            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.ASC, "trajanje"));
+        } else{
+            zPosete = terminRepository.findAll(Sort.by(Sort.Direction.DESC, "datum"));
         }
         return zPosete
                 .stream()

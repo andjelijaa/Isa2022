@@ -5,6 +5,7 @@ import com.example.backend.models.Termin;
 import com.example.backend.models.User;
 import com.example.backend.repository.TerminRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.service.Impl.TerminServiceImpl;
 import com.example.backend.service.UserService;
 import com.example.backend.utils.QRGenerator;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +23,16 @@ public class TerminController {
   private final UserService userService;
   private final TerminRepository terminRepository;
   private final UserRepository userRepository;
+  private final TerminServiceImpl terminService;
 
-  public TerminController(UserService userService, TerminRepository terminRepository, UserRepository userRepository) {
+  public TerminController(UserService userService,
+                          TerminRepository terminRepository,
+                          UserRepository userRepository,
+                          TerminServiceImpl terminService) {
     this.userService = userService;
     this.terminRepository = terminRepository;
     this.userRepository=userRepository;
+    this.terminService = terminService;
   }
 
   @GetMapping("/qr-codes")
@@ -49,28 +55,23 @@ public class TerminController {
 
 
   @PostMapping("/{terminId}/zakazi")
-  public boolean zakaziTermin(Principal principal, @RequestParam(name = "terminId") Long terminId) throws Exception {
+  public boolean zakaziTermin(Principal principal, @PathVariable(name = "terminId") Long terminId) throws Exception {
     User user = userService.getActivatedUserFromPrincipal(principal);
-    Termin termin = terminRepository.findById(terminId).orElseThrow(() -> new NotFoundException("Termin ne postoji"));
-    termin.setPacijent(user);
-    termin.setZakazan(true);
-    terminRepository.save(termin);
-    return true;
+    return terminService.zakaziTermin(user, terminId);
   }
 
   @DeleteMapping("/{terminId}/otkazi")
-  public boolean otkaziTermin(Principal principal, @RequestParam(name = "terminId") Long terminId) throws Exception {
+  public boolean otkaziTermin(Principal principal, @PathVariable(name = "terminId") Long terminId) throws Exception {
     User user = userService.getActivatedUserFromPrincipal(principal);
-    Termin termin = terminRepository.findById(terminId).orElseThrow(() -> new NotFoundException("Termin ne postoji"));
-    if(termin.getDatum().after(Timestamp.valueOf(LocalDateTime.now().plusDays(1)))){
+    return terminService.otkaziTermin(user, terminId);
+  }
 
-      user.setPenali(user.getPenali() + 1);
-      userRepository.save(user);
-    }
-    termin.setPacijent(null);
-    termin.setZakazan(false);
-    terminRepository.save(termin);
-    return true;
+  @GetMapping("/istorija-termina")
+  public List<Termin> getIstorijaZaKorisnika(
+          Principal principal
+  ) throws Exception {
+    User user = userService.getActivatedUserFromPrincipal(principal);
+    return terminService.istorijaPoseta(user);
   }
 
 }

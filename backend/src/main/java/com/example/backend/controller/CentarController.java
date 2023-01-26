@@ -17,6 +17,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController()
+//@CrossOrigin
 @RequestMapping("/centar")
 public class CentarController {
     private final UserService userService;
@@ -46,7 +47,7 @@ public class CentarController {
 
     @GetMapping("{centarId}/get-all-za-korisnika")
     public List<IstorijaPoseta> getSveZaKorisnika(Principal principal,
-                                                  @RequestParam(name = "centarId") Long centarId) throws Exception {
+                                                  @PathVariable(name = "centarId") Long centarId) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
 
         return centarService.getIstorijuPosetaZaKorisnikaUCentru(user, centarId);
@@ -54,14 +55,14 @@ public class CentarController {
 
     @GetMapping("{centarId}/get-zakazane-posete")
     public List<Termin> getZakazanePosete(Principal principal,
-                                                  @RequestParam(name = "centarId") Long centarId, @RequestBody SortZakazanePoseteDto sortZakazanePoseteDto) throws Exception {
+                                                  @PathVariable(name = "centarId") Long centarId, @RequestBody SortZakazanePoseteDto sortZakazanePoseteDto) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
         return centarService.getZakazanePosete(centarId, sortZakazanePoseteDto);
     }
 
     @PostMapping("{centarId}/kreiraj-termin")
     public void kreirajTermin(Principal principal,
-                              @RequestParam(name = "centarId") Long centarId,
+                              @PathVariable(name = "centarId") Long centarId,
                               @RequestParam(name = "datum") String datum,
                               @RequestParam(name = "vreme") String vreme) throws Exception {
         User user = userService.getActivatedUserFromPrincipal(principal);
@@ -80,10 +81,12 @@ public class CentarController {
         return centarService.getKreiraniTermini(centarId, sortTerminDto);
     }
 
+//    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("{centarId}/get-slobodni-termini")
     public List<Termin> getSlobodniTermini(Principal principal,
-                                           @RequestParam(name = "centarId") Long centarId) throws Exception {
+                                           @PathVariable(name = "centarId") Long centarId) throws Exception {
         userService.getActivatedUserFromPrincipal(principal);
+        System.out.println(centarId);
         return centarService.getSlobodniTermini(centarId);
     }
 

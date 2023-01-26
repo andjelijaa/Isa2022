@@ -1,4 +1,5 @@
 <template>
+    <NavbarView/>
     <div class="form-floating">
         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 150px"
             v-model="zalba"></textarea>
@@ -9,8 +10,10 @@
 
 <script>
 import axios from 'axios';
+import NavbarView from '@/components/NavbarView.vue';
 
 export default {
+    components: {NavbarView},
     name: 'ZalbeView',
     data() {
         return {
