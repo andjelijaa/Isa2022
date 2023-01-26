@@ -12,7 +12,6 @@ public interface CentarService {
 
     CentarDto getCentarById(Long centarId) throws Exception;
 
-    List<IstorijaPoseta> getIstorijuPosetaZaKorisnikaUCentru(User user, Long centarId);
 
     void kreirajTermin(Long centarId, String datum, String vreme);
 
@@ -27,4 +26,5 @@ public interface CentarService {
     List<Termin> getSlobodniTermini(Long centarId);
 
 
+    List<Centar> getCentriZaZalbe(User user);
 }

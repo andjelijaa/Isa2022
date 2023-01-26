@@ -21,10 +21,6 @@ public class Termin {
     @JoinColumn(name = "pacijent_id", nullable = true)
     private User pacijent;
 
-//    @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
-//    @JoinColumn(name = "doktor_id", nullable = true)
-//    private User doktor;
-
     @ManyToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinColumn(name = "centar_id", nullable = true)
     private Centar centar;

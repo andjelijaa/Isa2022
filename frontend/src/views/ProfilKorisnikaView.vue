@@ -21,7 +21,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input type="text" v-model="user.email" /></td>
+                            <td><input type="text" v-model="user.email" disabled/></td>
                             <td><input type="text" v-model="user.ime" /></td>
                             <td><input type="text" v-model="user.prezime" /></td>
                             <td><input type="text" v-model="user.grad" /></td>
@@ -29,7 +29,7 @@
                             <td><input type="text" v-model="user.drzava" /></td>
                             <td><input type="text" v-model="user.phone" /></td>
                             <td><input type="text" v-model="user.jmbg" /></td>
-                            <td><input type="text" v-model="user.gendre" /></td>
+                            <td><input type="text" v-model="user.genter" /></td>
                             <td><button class="btn btn-primary" @click="update">Update</button></td>
                         </tr>
                     </tbody>
@@ -53,20 +53,22 @@ export default {
     },
     methods: {
         getKorisnik() {
-            axios.get('http://localhost:8081/api/user/get-user', {
+            axios.get('http://localhost:8081/user/get-user', {
             headers: {
                 'Authorization': `Bearer ${this.$store.state.token}`,
             }
         })
                 .then((response) => {
-                    this.korisnik = response.data;
+                    console.log('Profil korisnika')
+                    console.log('RESPOSE DATA: ', response.data)
+                    this.user = response.data;
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         },
         update() {
-            axios.put('http://localhost:8081/api/user/update-user', this.user, {
+            axios.put('http://localhost:8081/user/update-user', this.user, {
             headers: {
                 'Authorization': `Bearer ${this.$store.state.token}`,
             }

@@ -18,7 +18,8 @@ public interface UserService {
 
     UserDto updateUser(User user, UserDto userDto);
 
-    void sendQuestions(User user, List<CreateQuestionDto> questions);
+    boolean sendQuestions(User user, List<CreateQuestionDto> questions);
+
     User findByActivation(String code);
 
 }

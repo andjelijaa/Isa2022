@@ -8,7 +8,6 @@ import com.example.backend.models.enums.StatusTermina;
 import com.example.backend.models.request.*;
 import com.example.backend.models.response.CentarDto;
 import com.example.backend.repository.CentarRepository;
-import com.example.backend.repository.IstorijaPosetaRepository;
 import com.example.backend.repository.TerminRepository;
 import com.example.backend.service.CentarService;
 import org.springframework.data.domain.Sort;
@@ -24,14 +23,11 @@ public class CentarServiceImpl implements CentarService {
 
 
     private final CentarRepository centarRepository;
-    private final IstorijaPosetaRepository istorijaPosetaRepository;
     private final TerminRepository terminRepository;
 
     public CentarServiceImpl(CentarRepository centarRepository,
-                             IstorijaPosetaRepository istorijaPosetaRepository,
                              TerminRepository terminrepository) {
         this.centarRepository = centarRepository;
-        this.istorijaPosetaRepository = istorijaPosetaRepository;
         this.terminRepository = terminrepository;
     }
 
@@ -76,12 +72,6 @@ public class CentarServiceImpl implements CentarService {
                 centar.getPhone(),
                 centar.getOcena()
         );
-    }
-
-    @Override
-    public List<IstorijaPoseta> getIstorijuPosetaZaKorisnikaUCentru(User user, Long centarId) {
-
-        return istorijaPosetaRepository.findAllByDavalacIdAndCentarId(user.getId(), centarId);
     }
 
     @Override
@@ -175,11 +165,22 @@ public class CentarServiceImpl implements CentarService {
     public List<Termin> getSlobodniTermini(Long centarId) {
         Timestamp now = Timestamp.valueOf(LocalDateTime.now());
         List<Termin> termini = terminRepository.findAll();
-        return termini
+        List<Termin> rester = termini
                 .stream()
                 .filter(termin -> termin.getDatum().after(now))
                 .filter(termin -> termin.getStatus().equals(StatusTermina.NOV))
                 .filter(termin -> termin.isZakazan() == false)
+                .collect(Collectors.toList());
+        return rester;
+    }
+
+    @Override
+    public List<Centar> getCentriZaZalbe(User user) {
+        List<Termin> termini = terminRepository.findByPacijentId(user.getId());
+        return termini
+                .stream()
+                .filter(termin -> termin.getDatum().before(Timestamp.valueOf(LocalDateTime.now())))
+                .map(termin -> termin.getCentar())
                 .collect(Collectors.toList());
     }
 }

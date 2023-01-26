@@ -33,7 +33,6 @@ import NavbarView from '@/components/NavbarView.vue';
 export default {
     components:{NavbarView},
     name: 'ZakazaniTermini',
-    props: ['centarId'],
     data() {
         return {
             zakazani: [],
@@ -41,7 +40,7 @@ export default {
     },
     methods: {
         getZakazani() {
-            axios.get(`http://localhost:8081/centar/${this.centarId}/get-zakazane-posete`
+            axios.get(`http://localhost:8081/termin/get-zakazane-posete`
            , {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -49,6 +48,8 @@ export default {
           }
         )    
             .then((response) => {
+                console.log("ZakazaniTermini")
+                console.log('data: ', response.data)
                     this.zakazani = response.data;
                 })
                 .catch((error) => {

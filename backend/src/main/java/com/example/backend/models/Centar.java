@@ -22,8 +22,8 @@ public class Centar {
     @OneToMany(mappedBy = "centar")
     private List<User> zaposleni;
 
-    @OneToMany(mappedBy = "centar")
-    private List<IstorijaPoseta> istorijaPoseta;
+//    @OneToMany(mappedBy = "centar")
+//    private List<IstorijaPoseta> istorijaPoseta;
 
     @OneToMany(mappedBy = "centar")
     private List<Termin> termini;

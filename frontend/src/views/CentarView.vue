@@ -36,8 +36,9 @@
         termini: [],
       };
     },
-    created() {
+    mounted() {
         let id=this.$route.params.id
+      console.log('Mounted CentarView')
       console.log("id:", id);
       axios
         .get(`http://localhost:8081/centar/${id}/get-slobodni-termini`, {
@@ -46,7 +47,9 @@
           },
         })
         .then((response) => {
+          console.log('CentarView')
           this.termini = response.data;
+          console.log('termini: ', this.termini)
         })
         .catch((error) => {
           console.log(error);

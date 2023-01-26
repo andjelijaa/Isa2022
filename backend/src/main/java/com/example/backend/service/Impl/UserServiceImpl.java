@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findByEmail(principal.getName());
         if(u != null && u.getActivation() == null){
             return u;
-    }else {
-        throw new UnauthorizedException();   }
-    }
+        }else {
+            throw new UnauthorizedException();   }
+        }
 
     @Override
     public UserDto updateUser(User user, UserDto userDto) {
@@ -49,9 +49,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendQuestions(User user, List<CreateQuestionDto> questions) {
+    public boolean sendQuestions(User user, List<CreateQuestionDto> questions) {
         user.setQuestions(questions);
         userRepository.save(user);
+        return true;
     }
 
     @Override
